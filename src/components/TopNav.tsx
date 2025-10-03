@@ -84,9 +84,14 @@ function WorkContactPill({ contactActive }: { contactActive: boolean }){
   const contactText = useDecryptedText(contactLabel, hovered==='contact')
 
   return (
-    <div onMouseLeave={()=>setHovered('none')} className="glass pill shadow-glow px-3 py-2 max-md:w-full max-md:px-2 max-md:py-2">
-      <div className="flex items-center gap-3 max-md:w-full max-md:justify-between">
-        <Link onMouseEnter={()=>setHovered('work')} to="/work" className="px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550] max-md:text-xs max-md:px-2" aria-label="Work">
+    <div onMouseLeave={()=>setHovered('none')} className="glass pill shadow-glow px-3 py-2 max-md:w-full max-md:px-2 max-md:py-[0.35rem]">
+      <div className="flex items-center gap-3 max-md:w-full max-md:gap-0.5">
+        <Link
+          onMouseEnter={()=>setHovered('work')}
+          to="/work"
+          className="flex-1 inline-flex justify-center items-center px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550] max-md:text-[0.82rem] max-md:px-3 max-md:py-[0.45rem]"
+          aria-label="Work"
+        >
           <span style={{fontFamily:'"Share Tech Mono", "Rajdhani", "Orbitron", monospace'}}>{hovered==='work'?workText:'WORK'}</span>
         </Link>
         <motion.svg width="66" height="24" viewBox="0 0 66 24" className="max-md:hidden">
@@ -121,7 +126,12 @@ function WorkContactPill({ contactActive }: { contactActive: boolean }){
             </linearGradient>
           </defs>
         </motion.svg>
-        <Link onMouseEnter={()=>setHovered('contact')} to={contactHref} className={`px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550] max-md:text-xs max-md:px-2 ${contactActive?'text-emerald-300/90 hover:text-emerald-200':'text-white/90 hover:text-white'}`} aria-label={contactActive?'Close overlay':'Contact'}>
+        <Link
+          onMouseEnter={()=>setHovered('contact')}
+          to={contactHref}
+          className={`flex-1 inline-flex justify-center items-center px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550] max-md:text-[0.82rem] max-md:px-3 max-md:py-[0.45rem] ${contactActive?'text-emerald-300/90 hover:text-emerald-200':'text-white/90 hover:text-white'}`}
+          aria-label={contactActive?'Close overlay':'Contact'}
+        >
           <span style={{fontFamily:'"Share Tech Mono", "Rajdhani", "Orbitron", monospace'}}>{hovered==='contact'?contactText:contactLabel}</span>
         </Link>
       </div>

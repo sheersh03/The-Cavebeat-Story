@@ -23,16 +23,12 @@ function CenterMedallion({ dimmed = false }: { dimmed?: boolean }){
   return (
     <div className="absolute inset-0 flex items-center justify-center select-none">
       <div className={`relative w-[240px] h-[240px] md:w-[300px] md:h-[300px] max-md:w-[65vw] max-md:h-[65vw] transition-all duration-700 ${dimmed ? 'opacity-40 scale-95' : 'opacity-100 scale-100'}`}>
-        {/* outer glow ring */}
         <div className="absolute inset-0 rounded-full"
              style={{boxShadow:'inset 0 0 40px rgba(126,227,255,0.3), 0 0 80px rgba(126,227,255,0.25)'}}/>
-        {/* animated sheen ring */}
         <div className="absolute inset-2 rounded-full border border-white/20"
              style={{background:'conic-gradient(from 0deg, rgba(126,227,255,0.0), rgba(126,227,255,0.4), rgba(126,227,255,0.0) 30%)', filter:'blur(0.2px)',
                      animation:'spin 16s linear infinite'}}/>
-        {/* inner ring */}
         <div className="absolute inset-10 rounded-full border border-white/30" />
-        {/* logo */}
         <div className="absolute inset-0 flex items-center justify-center">
           <img src="/assets/img/logo.png" alt="CaveBeat logo" className="w-[55%] h-[55%] object-contain rounded-full"/>
         </div>
@@ -111,11 +107,11 @@ function ContactOverlay(){
           <span className="text-cyan-300 text-base">✶</span>
         </div>
         <div className="flex flex-col items-center gap-6">
-          <div className="flex items-center justify-center gap-[clamp(0.9rem,2vw,2rem)] text-[clamp(1.8rem,3.4vw,3.6rem)] tracking-[0.18em] font-light text-white/90 whitespace-nowrap max-md:overflow-x-auto max-md:no-scrollbar max-md:text-[clamp(1.4rem,9vw,2.8rem)] max-md:gap-[clamp(0.6rem,3vw,1.4rem)]" style={{fontFamily:'"Michroma","Orbitron","Rajdhani",sans-serif'}}>
+          <div className="flex items-center justify-center gap-[clamp(0.6rem,1.4vw,1.4rem)] text-[clamp(1.35rem,2.4vw,2.6rem)] tracking-[0.14em] font-light text-white/90 whitespace-nowrap" style={{fontFamily:'"Michroma","Orbitron","Rajdhani",sans-serif'}}>
             <span>WORLD</span>
-            <span className="text-cyan-200/80 text-[clamp(1rem,2.2vw,2.3rem)] max-md:text-[clamp(0.85rem,5vw,1.6rem)]">➜</span>
+            <span className="text-cyan-200/80 text-[clamp(0.8rem,1.8vw,1.8rem)]">➜</span>
             <span>WIDE</span>
-            <span className="text-cyan-200/80 text-[clamp(1rem,2.2vw,2.3rem)] max-md:text-[clamp(0.85rem,5vw,1.6rem)]">➜</span>
+            <span className="text-cyan-200/80 text-[clamp(0.8rem,1.8vw,1.8rem)]">➜</span>
             <span>WIRED</span>
           </div>
           <div className="h-[1px] w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent"/>
