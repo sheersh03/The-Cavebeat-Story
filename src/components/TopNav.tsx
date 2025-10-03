@@ -1,17 +1,67 @@
 
 import { Link } from 'react-router-dom'
 import { motion, useSpring, useTransform } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-export default function TopNav(){
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+const ANIMATION_STEPS = 28
+
+function useDecryptedText(label:string, active:boolean){
+  const [phase, setPhase] = useState(0)
+  const target = useMemo(()=>label.toUpperCase(), [label])
+
+  useEffect(()=>{
+    if(!active){
+      setPhase(0)
+      return
+    }
+
+    let frame = 0
+    const interval = window.setInterval(()=>{
+      frame+=1
+      setPhase(Math.min(frame, ANIMATION_STEPS))
+      if(frame>=ANIMATION_STEPS){
+        window.clearInterval(interval)
+      }
+    }, 22)
+
+    return ()=>window.clearInterval(interval)
+  },[active])
+
+  const rendered = useMemo(()=>{
+    if(phase>=ANIMATION_STEPS){
+      return target
+    }
+    const progress = phase / ANIMATION_STEPS
+    const revealCount = Math.floor(target.length * progress)
+    let result = ''
+    for(let i=0;i<target.length;i++){
+      if(i<revealCount){
+        result += target[i]
+      }else{
+        const randomIdx = Math.floor(Math.random()*SCRAMBLE_CHARS.length)
+        result += SCRAMBLE_CHARS[randomIdx]
+      }
+    }
+    return result
+  },[phase, target])
+
+  return rendered
+}
+
+type TopNavProps = {
+  contactActive?: boolean
+}
+
+export default function TopNav({ contactActive = false }: TopNavProps){
   return (
     <div className="fixed top-4 right-4 z-20">
-      <WorkContactPill/>
+      <WorkContactPill contactActive={contactActive}/>
     </div>
   )
 }
 
-function WorkContactPill(){
+function WorkContactPill({ contactActive }: { contactActive: boolean }){
   const [hovered, setHovered] = useState<'none'|'work'|'contact'>('none')
   const amp = useSpring(0, { stiffness: 180, damping: 16 })
 
@@ -28,10 +78,17 @@ function WorkContactPill(){
   const pulse = useTransform(amp, [0, 7], [0.35, 1])
   const glow = useTransform(pulse, v => 0.25 + (v - 0.35) * 0.6)
 
+  const workText = useDecryptedText('WORK', hovered==='work')
+  const contactLabel = contactActive ? 'CLOSE' : 'CONTACT'
+  const contactHref = contactActive ? '/' : '/contact'
+  const contactText = useDecryptedText(contactLabel, hovered==='contact')
+
   return (
     <div onMouseLeave={()=>setHovered('none')} className="glass pill shadow-glow px-3 py-2">
       <div className="flex items-center gap-3">
-        <Link onMouseEnter={()=>setHovered('work')} to="/work" className="px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white">Work</Link>
+        <Link onMouseEnter={()=>setHovered('work')} to="/work" className="px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550]" aria-label="Work">
+          <span style={{fontFamily:'"Share Tech Mono", "Rajdhani", "Orbitron", monospace'}}>{hovered==='work'?workText:'WORK'}</span>
+        </Link>
         <motion.svg width="66" height="24" viewBox="0 0 66 24">
           <motion.path
             d={path}
@@ -64,7 +121,9 @@ function WorkContactPill(){
             </linearGradient>
           </defs>
         </motion.svg>
-        <Link onMouseEnter={()=>setHovered('contact')} to="/contact" className="px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white">Contact</Link>
+        <Link onMouseEnter={()=>setHovered('contact')} to={contactHref} className={`px-3 py-1 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550] ${contactActive?'text-emerald-300/90 hover:text-emerald-200':'text-white/90 hover:text-white'}`} aria-label={contactActive?'Close overlay':'Contact'}>
+          <span style={{fontFamily:'"Share Tech Mono", "Rajdhani", "Orbitron", monospace'}}>{hovered==='contact'?contactText:contactLabel}</span>
+        </Link>
       </div>
     </div>
   )
