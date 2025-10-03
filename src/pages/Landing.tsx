@@ -29,7 +29,7 @@ function CenterMedallion(){
         <div className="absolute inset-10 rounded-full border border-white/30" />
         {/* logo */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <img src="/assets/img/bc_logo_nored-removebg-preview.png" alt="CaveBeat logo" className="w-[55%] h-[55%] object-contain rounded-full"/>
+          <img src="/assets/img/logo.png" alt="CaveBeat logo" className="w-[55%] h-[55%] object-contain rounded-full"/>
         </div>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
