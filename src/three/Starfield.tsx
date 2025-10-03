@@ -67,12 +67,14 @@ export default function Starfield(){
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(48, window.innerWidth/window.innerHeight, 0.1, 100)
-    camera.position.set(0, 6.5, 0.6)
     camera.up.set(0, 0, 1)
-    camera.lookAt(0, 0, 0)
 
     const root = new THREE.Group()
     scene.add(root)
+
+    const cameraTarget = new THREE.Vector3(0, 0, 0)
+    let baseYOffset = 0
+    let allowParallax = true
 
     const disposableResources: Array<{ dispose: () => void }> = []
 
@@ -147,14 +149,14 @@ export default function Starfield(){
     disposableResources.push(coreGlowMaterial)
 
     const orbitSpecs: PlanetSpec[] = [
-      { radius:0.6, size:0.08, speed:1.8, colorStops:[[0,"#b5b5b5"],[1,"#7d7d7d"]], glowColor:0xb6b6b6 },
-      { radius:0.86, size:0.12, speed:1.3, colorStops:[[0,"#f6d298"],[1,"#d2a86e"]], glowColor:0xf5d18c },
-      { radius:1.16, size:0.13, speed:1.0, colorStops:[[0,"#3478f6"],[0.55,"#5bd1ff"],[1,"#1c5fb3"]], glowColor:0x66d0ff },
-      { radius:1.46, size:0.11, speed:0.82, colorStops:[[0,"#d7744b"],[1,"#9b4024"]], glowColor:0xf08b63 },
-      { radius:1.92, size:0.23, speed:0.56, colorStops:[[0,"#c8b29a"],[0.5,"#a57b5f"],[1,"#c8b29a"]], glowColor:0xd8bca4 },
-      { radius:2.36, size:0.2, speed:0.47, colorStops:[[0,"#d7c49a"],[1,"#b69367"]], glowColor:0xf3e0b2, ring:{ inner:0.28, outer:0.48, color:0xf0e0b0, opacity:0.65 } },
-      { radius:2.82, size:0.16, speed:0.39, colorStops:[[0,"#8ee5ff"],[1,"#4fb0df"]], glowColor:0x8be5ff },
-      { radius:3.18, size:0.16, speed:0.32, colorStops:[[0,"#6c8bff"],[1,"#3155c7"]], glowColor:0x7ea3ff }
+      { radius:0.6, size:0.08, speed:1.1, colorStops:[[0,"#b5b5b5"],[1,"#7d7d7d"]], glowColor:0xb6b6b6 },
+      { radius:0.86, size:0.12, speed:0.85, colorStops:[[0,"#f6d298"],[1,"#d2a86e"]], glowColor:0xf5d18c },
+      { radius:1.16, size:0.13, speed:0.66, colorStops:[[0,"#3478f6"],[0.55,"#5bd1ff"],[1,"#1c5fb3"]], glowColor:0x66d0ff },
+      { radius:1.46, size:0.11, speed:0.54, colorStops:[[0,"#d7744b"],[1,"#9b4024"]], glowColor:0xf08b63 },
+      { radius:1.92, size:0.23, speed:0.41, colorStops:[[0,"#c8b29a"],[0.5,"#a57b5f"],[1,"#c8b29a"]], glowColor:0xd8bca4 },
+      { radius:2.36, size:0.2, speed:0.34, colorStops:[[0,"#d7c49a"],[1,"#b69367"]], glowColor:0xf3e0b2, ring:{ inner:0.28, outer:0.48, color:0xf0e0b0, opacity:0.65 } },
+      { radius:2.82, size:0.16, speed:0.29, colorStops:[[0,"#8ee5ff"],[1,"#4fb0df"]], glowColor:0x8be5ff },
+      { radius:3.18, size:0.16, speed:0.23, colorStops:[[0,"#6c8bff"],[1,"#3155c7"]], glowColor:0x7ea3ff }
     ]
 
     const orbitMaterials: any[] = []
@@ -231,18 +233,44 @@ export default function Starfield(){
       planetPivots.push({ pivot, mesh, speed: spec.speed, radius: spec.radius, glow, ring: ringMesh })
     })
 
-    function onResize(){
-      const { innerWidth, innerHeight } = window
-      renderer.setSize(innerWidth, innerHeight)
-      camera.aspect = innerWidth / innerHeight
-      camera.updateProjectionMatrix()
-    }
-    onResize()
-    window.addEventListener("resize", onResize)
-
     const pointerTarget = new THREE.Vector2(0, 0)
     const pointer = new THREE.Vector2(0, 0)
+
+    const applyResponsiveLayout = ()=>{
+      const { innerWidth, innerHeight } = window
+      const portrait = innerHeight > innerWidth
+      if(portrait){
+        const viewport = window.visualViewport
+        const viewportCenter = viewport ? viewport.offsetTop + viewport.height / 2 : innerHeight / 2
+        const normalizedShift = (innerHeight / 2 - viewportCenter) / innerHeight
+        const shift = THREE.MathUtils.clamp(normalizedShift * 4.5, -0.25, 0.12)
+        camera.position.set(0, 6.8 + shift * 0.45, 1.15 + shift * 0.25)
+        cameraTarget.set(0, -0.35 + shift * 0.55, 0)
+        baseYOffset = -0.22 + shift
+        solarGroup.position.set(0, -0.2 + shift * 0.85, 0)
+        allowParallax = false
+        pointerTarget.set(0, 0)
+        pointer.set(0, 0)
+      }else{
+        camera.position.set(0, 6.5, 0.6)
+        cameraTarget.set(0, 0, 0)
+        baseYOffset = 0
+        solarGroup.position.set(0, 0, 0)
+        allowParallax = true
+      }
+      camera.lookAt(cameraTarget)
+      camera.aspect = innerWidth / innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(innerWidth, innerHeight)
+    }
+
+    applyResponsiveLayout()
+    window.addEventListener("resize", applyResponsiveLayout)
     const handlePointerMove = (event: PointerEvent)=>{
+      if(!allowParallax){
+        pointerTarget.set(0, 0)
+        return
+      }
       pointerTarget.set((event.clientX / window.innerWidth) * 2 - 1, (event.clientY / window.innerHeight) * 2 - 1)
     }
     const handlePointerExit = ()=>{
@@ -259,9 +287,15 @@ export default function Starfield(){
       const elapsed = clock.getElapsedTime()
 
       pointer.lerp(pointerTarget, 0.08)
-      root.rotation.z = pointer.x * 0.12
-      root.position.x = pointer.x * 0.25
-      root.position.y = pointer.y * 0.18
+      if(allowParallax){
+        root.rotation.z = pointer.x * 0.12
+        root.position.x = pointer.x * 0.25
+        root.position.y = pointer.y * 0.18 + baseYOffset
+      }else{
+        root.rotation.z = 0
+        root.position.x = 0
+        root.position.y = baseYOffset
+      }
 
       stars.rotation.z += 0.0006
 
@@ -293,7 +327,7 @@ export default function Starfield(){
 
     return ()=>{
       cancelAnimationFrame(frameId)
-      window.removeEventListener("resize", onResize)
+      window.removeEventListener("resize", applyResponsiveLayout)
       window.removeEventListener("pointermove", handlePointerMove)
       window.removeEventListener("pointerup", handlePointerExit)
       window.removeEventListener("pointerleave", handlePointerExit)
