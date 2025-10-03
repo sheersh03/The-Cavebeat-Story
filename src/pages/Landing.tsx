@@ -22,7 +22,7 @@ export default function Landing({ contactMode = false }: LandingProps){
 function CenterMedallion({ dimmed = false }: { dimmed?: boolean }){
   return (
     <div className="absolute inset-0 flex items-center justify-center select-none">
-      <div className={`relative w-[240px] h-[240px] md:w-[300px] md:h-[300px] transition-all duration-700 ${dimmed ? 'opacity-40 scale-95' : 'opacity-100 scale-100'}`}>
+      <div className={`relative w-[240px] h-[240px] md:w-[300px] md:h-[300px] max-md:w-[65vw] max-md:h-[65vw] transition-all duration-700 ${dimmed ? 'opacity-40 scale-95' : 'opacity-100 scale-100'}`}>
         {/* outer glow ring */}
         <div className="absolute inset-0 rounded-full"
              style={{boxShadow:'inset 0 0 40px rgba(126,227,255,0.3), 0 0 80px rgba(126,227,255,0.25)'}}/>
@@ -95,37 +95,37 @@ function ContactOverlay(){
   ]
 
   return (
-    <div className="absolute inset-0 z-30 flex items-center justify-center px-6 py-16 text-white">
+    <div className="absolute inset-0 z-30 flex items-center justify-center px-6 py-16 max-md:px-4 max-md:pt-24 max-md:pb-20 text-white">
       <div className="absolute inset-0 bg-[#030b14]/80 backdrop-blur-2xl" />
       <GlobeAura/>
-      <div className="relative w-full max-w-5xl flex flex-col gap-12 text-center">
-        <div className="flex justify-center">
-          <a href="/" className="inline-flex items-center gap-2 px-5 py-2 border border-emerald-300/40 bg-black/20 rounded-full text-xs tracking-[0.35em] uppercase text-emerald-200/80 hover:text-emerald-200 hover:border-emerald-200 transition" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+      <div className="relative w-full max-w-5xl flex flex-col gap-12 text-center max-md:gap-8 max-md:items-center overflow-y-auto">
+        <div className="flex justify-center max-md:w-full">
+          <a href="/" className="inline-flex items-center gap-2 px-5 py-2 border border-emerald-300/40 bg-black/20 rounded-full text-xs tracking-[0.35em] uppercase text-emerald-200/80 hover:text-emerald-200 hover:border-emerald-200 transition max-md:px-4" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
             <span>Close</span>
             <span>✕</span>
           </a>
         </div>
-        <div className="flex items-center justify-center gap-4 text-[0.65rem] tracking-[0.6em] uppercase text-cyan-100/70" style={{fontFamily:'"Rajdhani", "Orbitron", "Share Tech Mono", sans-serif'}}>
+        <div className="flex items-center justify-center gap-4 text-[0.65rem] tracking-[0.6em] uppercase text-cyan-100/70 max-md:text-[0.55rem]" style={{fontFamily:'"Rajdhani", "Orbitron", "Share Tech Mono", sans-serif'}}>
           <span className="text-cyan-300 text-base">✶</span>
           <span>Contact Us</span>
           <span className="text-cyan-300 text-base">✶</span>
         </div>
         <div className="flex flex-col items-center gap-6">
-          <div className="flex items-center justify-center gap-[clamp(1.5rem,3vw,3rem)] text-[clamp(2.4rem,4.5vw,4.8rem)] tracking-[0.3em] font-light text-white/90 whitespace-nowrap" style={{fontFamily:'"Michroma","Orbitron","Rajdhani",sans-serif'}}>
+          <div className="flex items-center justify-center gap-[clamp(0.9rem,2vw,2rem)] text-[clamp(1.8rem,3.4vw,3.6rem)] tracking-[0.18em] font-light text-white/90 whitespace-nowrap max-md:overflow-x-auto max-md:no-scrollbar max-md:text-[clamp(1.4rem,9vw,2.8rem)] max-md:gap-[clamp(0.6rem,3vw,1.4rem)]" style={{fontFamily:'"Michroma","Orbitron","Rajdhani",sans-serif'}}>
             <span>WORLD</span>
-            <span className="text-cyan-200/80 text-[clamp(1.2rem,2.8vw,3rem)]">➜</span>
+            <span className="text-cyan-200/80 text-[clamp(1rem,2.2vw,2.3rem)] max-md:text-[clamp(0.85rem,5vw,1.6rem)]">➜</span>
             <span>WIDE</span>
-            <span className="text-cyan-200/80 text-[clamp(1.2rem,2.8vw,3rem)]">➜</span>
+            <span className="text-cyan-200/80 text-[clamp(1rem,2.2vw,2.3rem)] max-md:text-[clamp(0.85rem,5vw,1.6rem)]">➜</span>
             <span>WIRED</span>
           </div>
           <div className="h-[1px] w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent"/>
-          <a href="mailto:hello@cavebeat.com" className="inline-flex items-center gap-3 text-sm tracking-[0.45em] uppercase text-cyan-100/80 hover:text-white transition" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+          <a href="mailto:hello@cavebeat.com" className="inline-flex items-center gap-3 text-sm tracking-[0.45em] uppercase text-cyan-100/80 hover:text-white transition max-md:text-xs max-md:tracking-[0.35em]" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
             <span className="h-px w-8 bg-cyan-200/70" />
             hello@cavebeat.com
             <span className="h-px w-8 bg-cyan-200/70" />
           </a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-xs uppercase tracking-[0.35em] text-white/70" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-xs uppercase tracking-[0.35em] text-white/70 max-md:w-full max-md:gap-8" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
           <div className="flex flex-col items-center gap-3">
             <span className="text-white/60">Social</span>
             <div className="flex items-center gap-4 text-white/80">
@@ -151,14 +151,14 @@ function ContactOverlay(){
           </div>
           <div className="flex flex-col items-center gap-3">
             <span className="text-white/60">Access</span>
-            <div className="flex flex-col gap-2 text-[0.65rem] text-white/70">
+            <div className="flex flex-col gap-2 text-[0.65rem] text-white/70 max-md:text-[0.62rem]">
               <a href="#privacy" className="hover:text-white">Privacy Notice</a>
               <a href="#newsletter" className="hover:text-white">Newsletter Signup</a>
             </div>
           </div>
           <div className="flex flex-col items-center gap-3">
             <span className="text-white/60">Mobile Sync</span>
-            <div className="relative flex items-center justify-center w-24 h-24 rounded-lg border border-white/20 bg-black/40 shadow-[0_0_20px_rgba(126,227,255,0.15)]">
+            <div className="relative flex items-center justify-center w-24 h-24 rounded-lg border border-white/20 bg-black/40 shadow-[0_0_20px_rgba(126,227,255,0.15)] max-md:w-20 max-md:h-20">
               <span className="text-[0.5rem] tracking-[0.35em] text-white/50">QR</span>
             </div>
           </div>
@@ -171,7 +171,7 @@ function ContactOverlay(){
 function GlobeAura(){
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div className="relative w-[75vw] max-w-4xl aspect-square opacity-30">
+      <div className="relative w-[75vw] max-w-4xl aspect-square opacity-30 max-md:w-[110vw] max-md:opacity-25">
         <div className="absolute inset-0 rounded-full border border-cyan-200/20" />
         <div className="absolute inset-6 rounded-full border border-cyan-100/10" />
         <div className="absolute inset-12 rounded-full border border-cyan-50/10" />
@@ -234,7 +234,7 @@ function ScrollCue(){
   },[])
 
   return (
-    <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-cyan-100/80">
+    <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-cyan-100/80 max-md:bottom-10">
       <style>{`
         @keyframes arrowFloat{0%,100%{transform:translateY(-2px);}50%{transform:translateY(4px);}}
         @keyframes tailPulse{0%,100%{opacity:0.25;}50%{opacity:0.85;}}
@@ -242,13 +242,13 @@ function ScrollCue(){
       <button
         type="button"
         onClick={handleScroll}
-        className="flex flex-col items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/60 text-[0.7rem] tracking-[0.45em] uppercase font-semibold"
+        className="flex flex-col items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/60 text-[0.7rem] tracking-[0.45em] uppercase font-semibold max-md:text-[0.55rem] max-md:tracking-[0.3em]"
         style={{fontFamily:'"Rajdhani", "Orbitron", "Bank Gothic", "Segoe UI", sans-serif'}}
       >
         <span className="text-cyan-100/70">Scroll Down</span>
-        <div className="relative w-16 h-16">
+        <div className="relative w-16 h-16 max-md:w-14 max-md:h-14">
           <div className="absolute inset-0 rounded-full border border-cyan-200/35" style={{boxShadow:'0 0 18px rgba(126,227,255,0.35)'}}/>
-          <div className="absolute inset-[6px] rounded-full border border-cyan-100/20 bg-[#0b1a23]/60" style={{boxShadow:'inset 0 0 14px rgba(126,227,255,0.18)'}}/>
+          <div className="absolute inset-[6px] rounded-full border border-cyan-100/20 bg-[#0b1a23]/60 max-md:inset-[5px]" style={{boxShadow:'inset 0 0 14px rgba(126,227,255,0.18)'}}/>
           <svg
             className="absolute inset-0 m-auto h-6 w-6 text-cyan-100/80"
             viewBox="0 0 24 24"
@@ -265,7 +265,7 @@ function ScrollCue(){
             <path d="M12 3v12.6" stroke="url(#scroll-arrow)" strokeWidth="1.5" strokeLinecap="round"/>
             <path d="M7 12.6L12 18l5-5.4" fill="none" stroke="url(#scroll-arrow)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <div className="absolute -bottom-10 left-1/2 h-12 w-[2px] -translate-x-1/2 bg-gradient-to-b from-cyan-200/80 via-cyan-200/0 to-transparent" style={{animation:'tailPulse 2.8s ease-in-out infinite'}}/>
+          <div className="absolute -bottom-10 left-1/2 h-12 w-[2px] -translate-x-1/2 bg-gradient-to-b from-cyan-200/80 via-cyan-200/0 to-transparent max-md:h-10" style={{animation:'tailPulse 2.8s ease-in-out infinite'}}/>
         </div>
       </button>
     </div>
