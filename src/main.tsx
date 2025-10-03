@@ -5,13 +5,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App'
 import Landing from './pages/Landing'
 import Work from './pages/Work'
-import Contact from './pages/Contact'
 
 const router = createBrowserRouter([
   { path: "/", element: <App/>, children: [
     { index: true, element: <Landing/> },
     { path: "work", element: <Work/> },
-    { path: "contact", element: <Contact/> },
+    { path: "contact", element: <Landing contactMode/> },
   ]}
 ])
 
