@@ -1,0 +1,1 @@
+export default function Work(){return <div className='container py-24'><h1 className='text-3xl font-bold'>Work</h1><p className='text-white/70 mt-2'>Coming next…</p></div>}

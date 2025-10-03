@@ -1,0 +1,7 @@
+
+@tailwind base; @tailwind components; @tailwind utilities;
+html, body, #root { height: 100%; }
+body { background: radial-gradient(900px 600px at 80% -10%, rgba(126,227,255,0.05), transparent 60%), #05070b; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px); }
+.pill { border-radius: 9999px; }
