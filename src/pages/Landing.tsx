@@ -1,21 +1,43 @@
 
 import Starfield from "../three/Starfield"
 import TopNav from "../components/TopNav"
-import { useCallback, type CSSProperties } from "react"
+import BootSequence from "../components/BootSequence"
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react"
 
 type LandingProps = {
   contactMode?: boolean
 }
 
 export default function Landing({ contactMode = false }: LandingProps){
+  const initialBoot = useMemo(()=>{
+    const hasBooted = typeof sessionStorage !== "undefined" && sessionStorage.getItem("cavebeat_booted") === "1"
+    return !contactMode && !hasBooted
+  },[contactMode])
+
+  const [booting, setBooting] = useState(initialBoot)
+
+  useEffect(()=>{
+    if(contactMode){
+      setBooting(false)
+    }
+  },[contactMode])
+
+  const handleBootComplete = useCallback(()=>{
+    try { sessionStorage.setItem("cavebeat_booted", "1") } catch(_){}
+    setBooting(false)
+  },[])
+
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      <Starfield/>
-      <TopNav contactActive={contactMode}/>
-      <CenterMedallion dimmed={contactMode}/>
-      {!contactMode && <ScrollCue/>}
-      {contactMode && <ContactOverlay/>}
-    </div>
+    <>
+      {booting && !contactMode && <BootSequence onComplete={handleBootComplete}/>}
+      <div className={`relative min-h-screen overflow-hidden transition-opacity duration-700 ${booting && !contactMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <Starfield/>
+        <TopNav contactActive={contactMode}/>
+        <CenterMedallion dimmed={contactMode}/>
+        {!contactMode && <ScrollCue/>}
+        {contactMode && <ContactOverlay/>}
+      </div>
+    </>
   )
 }
 
@@ -45,6 +67,8 @@ type SocialIcon = {
   path: string[]
   accent?: string
 }
+
+import { Link } from "react-router-dom"
 
 function ContactOverlay(){
   const socials: SocialIcon[] = [
@@ -96,10 +120,10 @@ function ContactOverlay(){
       <GlobeAura/>
       <div className="relative w-full max-w-5xl flex flex-col gap-12 text-center max-md:gap-8 max-md:items-center overflow-y-auto">
         <div className="flex justify-center max-md:w-full">
-          <a href="/" className="inline-flex items-center gap-2 px-5 py-2 border border-emerald-300/40 bg-black/20 rounded-full text-xs tracking-[0.35em] uppercase text-emerald-200/80 hover:text-emerald-200 hover:border-emerald-200 transition max-md:px-4" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+          <Link to="/" replace className="inline-flex items-center gap-2 px-5 py-2 border border-emerald-300/40 bg-black/20 rounded-full text-xs tracking-[0.35em] uppercase text-emerald-200/80 hover:text-emerald-200 hover:border-emerald-200 transition max-md:px-4" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
             <span>Close</span>
             <span>✕</span>
-          </a>
+          </Link>
         </div>
         <div className="flex items-center justify-center gap-4 text-[0.65rem] tracking-[0.6em] uppercase text-cyan-100/70 max-md:text-[0.55rem]" style={{fontFamily:'"Rajdhani", "Orbitron", "Share Tech Mono", sans-serif'}}>
           <span className="text-cyan-300 text-base">✶</span>
