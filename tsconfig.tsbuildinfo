@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/bootsequence.tsx","./src/components/topnav.tsx","./src/pages/contact.tsx","./src/pages/landing.tsx","./src/pages/work.tsx","./src/three/starfield.tsx","./src/types/three.d.ts"],"version":"5.9.3"}

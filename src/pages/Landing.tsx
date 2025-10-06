@@ -33,6 +33,7 @@ export default function Landing({ contactMode = false }: LandingProps){
       <div className={`relative min-h-screen overflow-hidden transition-opacity duration-700 ${booting && !contactMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <Starfield/>
         <TopNav contactActive={contactMode}/>
+        <CornerTagline/>
         <CenterMedallion dimmed={contactMode}/>
         {!contactMode && <ScrollCue/>}
         {contactMode && <ContactOverlay/>}
@@ -58,6 +59,100 @@ function CenterMedallion({ dimmed = false }: { dimmed?: boolean }){
       </div>
     </div>
   )
+}
+
+function CornerTagline(){
+  const acronym = "Connected AI Verticals Edge Bridging Ecosystems Across Territories"
+  const prefersReducedMotion = usePrefersReducedMotion()
+  const { output, complete } = useTypewriter(acronym, {
+    startDelay: 520,
+    minSpeed: 22,
+    maxSpeed: 64,
+    enabled: !prefersReducedMotion
+  })
+  const rendered = prefersReducedMotion ? acronym : (complete ? acronym : output)
+  const caretShouldPulse = !prefersReducedMotion && complete
+
+  return (
+    <div className="hidden md:flex fixed top-6 left-6 z-20 max-w-sm xl:max-w-md">
+      <div className="relative overflow-hidden px-4 py-3 rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-[0_0_25px_rgba(126,227,255,0.2)]">
+        <span className="pointer-events-none absolute -inset-px rounded-xl opacity-60 blur-lg bg-[radial-gradient(circle_at_top_left,rgba(126,227,255,0.38),rgba(126,227,255,0))]" aria-hidden="true"/>
+        <span className="pointer-events-none absolute inset-0 rounded-xl border border-cyan-200/20" aria-hidden="true"/>
+        <span className="pointer-events-none absolute inset-x-3 top-[1.5rem] h-px bg-gradient-to-r from-transparent via-cyan-100/40 to-transparent" aria-hidden="true"/>
+        <span className="pointer-events-none absolute left-3 bottom-3 w-2 h-2 rounded-full bg-cyan-200/60 shadow-[0_0_18px_rgba(126,227,255,0.6)]" aria-hidden="true"/>
+        <div className="relative flex flex-col gap-1.5 text-white" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+          <span className="text-[0.58rem] tracking-[0.78em] text-cyan-200/80">C.A.V.E.B.E.A.T</span>
+          <div className="relative text-[0.78rem] leading-5 tracking-[0.18em] text-white/80">
+            <span className="corner-typewriter block pr-5" data-complete={caretShouldPulse}>{rendered}</span>
+          </div>
+        </div>
+        <style>{`
+          @keyframes caretPulse{0%,45%{opacity:1;}50%,100%{opacity:0.08;}}
+          .corner-typewriter{position:relative; display:inline-block; min-height:1.1rem;}
+          .corner-typewriter::after{content:''; position:absolute; right:0.2rem; top:0.12rem; width:0.18rem; height:1.05rem; background:rgba(184,242,255,0.9); box-shadow:0 0 14px rgba(126,227,255,0.65); border-radius:0.08rem; opacity:0.9;}
+          .corner-typewriter[data-complete="true"]::after{animation:caretPulse 1.15s steps(1) infinite;}
+        `}</style>
+      </div>
+    </div>
+  )
+}
+
+function useTypewriter(text: string, options?: { startDelay?: number; minSpeed?: number; maxSpeed?: number; enabled?: boolean }){
+  const { startDelay = 400, minSpeed = 30, maxSpeed = 60, enabled = true } = options ?? {}
+  const [index, setIndex] = useState(enabled ? 0 : text.length)
+
+  useEffect(()=>{
+    if(!enabled){
+      setIndex(text.length)
+      return
+    }
+    setIndex(0)
+  },[text, enabled])
+
+  useEffect(()=>{
+    if(!enabled){
+      return
+    }
+    if(index >= text.length){
+      return
+    }
+    const jitter = Math.random() * Math.max(1, maxSpeed - minSpeed)
+    const delay = (index === 0 ? startDelay : minSpeed) + jitter
+    const timer = window.setTimeout(()=>{
+      setIndex(prev => Math.min(text.length, prev + 1))
+    }, delay)
+    return ()=>window.clearTimeout(timer)
+  },[index, text.length, startDelay, minSpeed, maxSpeed, enabled])
+
+  const output = text.slice(0, index)
+  const complete = index >= text.length
+  return { output, complete }
+}
+
+function usePrefersReducedMotion(){
+  const [prefers, setPrefers] = useState(false)
+
+  useEffect(()=>{
+    if(typeof window === 'undefined' || !window.matchMedia){
+      return
+    }
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = (matches: boolean) => setPrefers(matches)
+    update(media.matches)
+    const listener = (event: MediaQueryListEvent)=>update(event.matches)
+
+    if(typeof media.addEventListener === 'function'){
+      media.addEventListener('change', listener)
+      return ()=>media.removeEventListener('change', listener)
+    }
+
+    if(typeof media.addListener === 'function'){
+      media.addListener(listener)
+      return ()=>media.removeListener(listener)
+    }
+  },[])
+
+  return prefers
 }
 
 type SocialIcon = {
