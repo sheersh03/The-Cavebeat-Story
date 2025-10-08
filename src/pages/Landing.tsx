@@ -2,7 +2,8 @@
 import Starfield from "../three/Starfield"
 import TopNav from "../components/TopNav"
 import BootSequence from "../components/BootSequence"
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from "react"
+import { Link } from "react-router-dom"
 
 type LandingProps = {
   contactMode?: boolean
@@ -15,6 +16,7 @@ export default function Landing({ contactMode = false }: LandingProps){
   },[contactMode])
 
   const [booting, setBooting] = useState(initialBoot)
+  const belowFoldRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(()=>{
     if(contactMode){
@@ -35,8 +37,11 @@ export default function Landing({ contactMode = false }: LandingProps){
         <TopNav contactActive={contactMode}/>
         <CornerTagline/>
         <CenterMedallion dimmed={contactMode}/>
-        {!contactMode && <ScrollCue/>}
+        {!contactMode && <ScrollCue targetRef={belowFoldRef}/>}
         {contactMode && <ContactOverlay/>}
+      </div>
+      <div ref={belowFoldRef}>
+        <BelowFoldContent/>
       </div>
     </>
   )
@@ -94,6 +99,109 @@ function CornerTagline(){
         `}</style>
       </div>
     </div>
+  )
+}
+
+function BelowFoldContent(){
+  const pillars = [
+    {
+      label:'Connected AI',
+      title:'Interlink real-time intelligence',
+      body:'We dock data streams from satellites, sensors, and screens into a single orbit so your teams always act on the same signal.'
+    },
+    {
+      label:'Edge Bridging',
+      title:'Push decisions to the frontier',
+      body:'Latency dies when compute meets the point of impact. Our edge meshes keep critical ops online even when the cloud is out of sight.'
+    },
+    {
+      label:'Ecosystems Across Territories',
+      title:'Scale without silos',
+      body:'Compliance, localization, and identity layers come pre-routed so expansion to new markets is as quick as powering up a new node.'
+    }
+  ]
+
+  return (
+    <main className="relative overflow-hidden bg-gradient-to-b from-[#030915] via-[#041020] to-[#040a14] text-white">
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[540px] w-[540px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(88,206,255,0.22),rgba(3,11,20,0))] blur-3xl" aria-hidden="true"/>
+      <div className="pointer-events-none absolute top-1/2 left-0 h-[420px] w-[420px] -translate-y-1/2 -translate-x-1/3 rounded-full bg-[radial-gradient(circle,rgba(44,160,220,0.16),rgba(4,10,20,0))] blur-3xl" aria-hidden="true"/>
+      <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 md:pt-32 md:pb-16">
+        <div className="grid items-start gap-12 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <div className="space-y-6">
+            <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-white/5 px-4 py-1 text-[0.68rem] tracking-[0.4em] uppercase text-cyan-100/70" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+              <span className="h-1 w-1 rounded-full bg-cyan-200/80 shadow-[0_0_10px_rgba(126,227,255,0.7)]" aria-hidden="true"/>
+              Next Orbit
+            </span>
+            <h2 className="text-[clamp(1.9rem,3vw,2.8rem)] font-light leading-tight tracking-[0.05em] text-white/95" style={{fontFamily:'"Michroma","Orbitron","Rajdhani",sans-serif'}}>
+              Designed to move intelligence seamlessly between every environment you operate in.
+            </h2>
+            <p className="max-w-xl text-base leading-relaxed text-white/70" style={{fontFamily:'"Rajdhani","Share Tech Mono","Orbitron",sans-serif'}}>
+              Cavebeat engineers spatial experiences where product teams, AI agents, and field specialists collaborate without friction. Our platform fuses immersive storytelling with mission-critical telemetry so strategy, execution, and customer touchpoints stay perfectly in sync.
+            </p>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-[0_20px_60px_rgba(3,12,24,0.45)]">
+            <span className="pointer-events-none absolute -top-32 right-0 h-72 w-72 translate-x-16 rounded-full bg-[radial-gradient(circle,rgba(148,233,255,0.2),rgba(4,10,20,0))]" aria-hidden="true"/>
+            <div className="relative space-y-6">
+              <header className="flex items-center gap-3">
+                <div className="relative h-12 w-12 rounded-lg border border-cyan-200/30 bg-[#061427]/60 shadow-[0_0_22px_rgba(126,227,255,0.35)]">
+                  <div className="absolute inset-0 m-auto flex h-full w-full items-center justify-center text-[0.7rem] tracking-[0.4em] text-cyan-100/80" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>AI</div>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs tracking-[0.4em] uppercase text-cyan-100/70" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>Mission Control</span>
+                  <span className="text-[1.05rem] tracking-[0.08em] text-white/90" style={{fontFamily:'"Rajdhani","Orbitron",sans-serif'}}>Unified insight layer</span>
+                </div>
+              </header>
+              <p className="text-sm leading-relaxed text-white/65" style={{fontFamily:'"Rajdhani","Share Tech Mono","Orbitron",sans-serif'}}>
+                Every Cavebeat deployment launches with a living dashboard that mirrors your live operations. Layer in AR cues, dynamic routing, or automated rituals to orchestrate work across continents while keeping teams immersed in a single narrative.
+              </p>
+              <ul className="grid gap-4 text-sm text-white/80" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+                <li className="flex items-center gap-3 rounded-lg border border-white/5 bg-black/30 px-4 py-3">
+                  <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(148,233,255,0.6)]"/>
+                  Quantum-ready data fabric
+                </li>
+                <li className="flex items-center gap-3 rounded-lg border border-white/5 bg-black/30 px-4 py-3">
+                  <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(148,233,255,0.6)]"/>
+                  Adaptive human + agent rituals
+                </li>
+                <li className="flex items-center gap-3 rounded-lg border border-white/5 bg-black/30 px-4 py-3">
+                  <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(148,233,255,0.6)]"/>
+                  Borderless compliance backbone
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="relative mx-auto max-w-6xl px-6 pb-24 md:pb-32">
+        <div className="grid gap-8 md:grid-cols-3">
+          {pillars.map(({label, title, body})=>{
+            return (
+              <article key={label} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#050d1a]/80 p-6 shadow-[0_15px_45px_rgba(3,10,20,0.55)] transition-transform duration-300 hover:-translate-y-2">
+                <span className="pointer-events-none absolute -top-24 right-0 h-48 w-48 translate-x-12 rounded-full bg-[radial-gradient(circle,rgba(126,227,255,0.18),rgba(5,10,20,0))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true"/>
+                <span className="text-xs tracking-[0.45em] uppercase text-cyan-200/80" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>{label}</span>
+                <h3 className="mt-4 text-lg font-medium tracking-[0.08em] text-white/90" style={{fontFamily:'"Rajdhani","Orbitron",sans-serif'}}>{title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/65" style={{fontFamily:'"Rajdhani","Share Tech Mono","Orbitron",sans-serif'}}>{body}</p>
+              </article>
+            )
+          })}
+        </div>
+        <div className="mt-16 flex flex-col items-center gap-5 text-center">
+          <p className="max-w-2xl text-sm leading-relaxed text-white/70" style={{fontFamily:'"Rajdhani","Share Tech Mono","Orbitron",sans-serif'}}>
+            Ready to chart the next constellation of experiences? We architect the bridge between narrative, data, and deployment so brand, product, and ops stay gravitationally aligned.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link to="/work" className="inline-flex items-center gap-2 rounded-full border border-cyan-200/40 bg-black/40 px-5 py-2 text-xs uppercase tracking-[0.45em] text-cyan-100/80 hover:text-white hover:border-cyan-200/80 transition" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+              <span>View Work</span>
+              <span>⟶</span>
+            </Link>
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-300/10 px-5 py-2 text-xs uppercase tracking-[0.45em] text-emerald-100/80 hover:text-white hover:border-emerald-200/80 transition" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+              <span>Launch Mission</span>
+              <span>✶</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   )
 }
 
@@ -162,8 +270,6 @@ type SocialIcon = {
   path: string[]
   accent?: string
 }
-
-import { Link } from "react-router-dom"
 
 function ContactOverlay(){
   const socials: SocialIcon[] = [
@@ -341,12 +447,17 @@ function GlobeAura(){
   )
 }
 
-function ScrollCue(){
+function ScrollCue({ targetRef }: { targetRef: RefObject<HTMLDivElement | null> }){
   const handleScroll = useCallback(()=>{
     if(typeof window === 'undefined') return
+    const element = targetRef?.current
+    if(element){
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
     const target = window.innerHeight * 0.9
     window.scrollBy({ top: target, behavior: 'smooth' })
-  },[])
+  },[targetRef])
 
   return (
     <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-cyan-100/80 max-md:bottom-10">
