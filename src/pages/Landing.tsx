@@ -2,6 +2,7 @@
 import Starfield from "../three/Starfield"
 import TopNav from "../components/TopNav"
 import BootSequence from "../components/BootSequence"
+import CelestialScroll from "../components/CelestialScroll"
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from "react"
 import { Link } from "react-router-dom"
 
@@ -29,13 +30,26 @@ export default function Landing({ contactMode = false }: LandingProps){
     setBooting(false)
   },[])
 
+  // Add hook to detect mobile viewport
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <>
       {booting && !contactMode && <BootSequence onComplete={handleBootComplete}/>}
       <div className={`relative min-h-screen overflow-hidden transition-opacity duration-700 ${booting && !contactMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <Starfield/>
         <TopNav contactActive={contactMode}/>
-        <CornerTagline/>
+        {!isMobile && <CornerTagline/>}
         <CenterMedallion dimmed={contactMode}/>
         {!contactMode && <ScrollCue targetRef={belowFoldRef}/>}
         {contactMode && <ContactOverlay/>}
@@ -125,6 +139,9 @@ function BelowFoldContent(){
     <main className="relative overflow-hidden bg-gradient-to-b from-[#030915] via-[#041020] to-[#040a14] text-white">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-[540px] w-[540px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(88,206,255,0.22),rgba(3,11,20,0))] blur-3xl" aria-hidden="true"/>
       <div className="pointer-events-none absolute top-1/2 left-0 h-[420px] w-[420px] -translate-y-1/2 -translate-x-1/3 rounded-full bg-[radial-gradient(circle,rgba(44,160,220,0.16),rgba(4,10,20,0))] blur-3xl" aria-hidden="true"/>
+      
+      {/* Interactive Celestial Scrolling Animation */}
+      <CelestialScroll />
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 md:pt-32 md:pb-16">
         <div className="grid items-start gap-12 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
           <div className="space-y-6">
