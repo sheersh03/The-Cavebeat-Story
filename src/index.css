@@ -1,9 +1,501 @@
 
+/* Font Loading and Fallbacks - Must be at the top */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Michroma&display=swap');
+
 @tailwind base; @tailwind components; @tailwind utilities;
-html, body, #root { height: 100%; }
-body { background: radial-gradient(900px 600px at 80% -10%, rgba(126,227,255,0.05), transparent 60%), #05070b; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-.glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px); }
-.pill { border-radius: 9999px; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Global Styles */
+html, body, #root { 
+  height: 100%; 
+  scroll-behavior: smooth;
+}
+
+body { 
+  background: radial-gradient(900px 600px at 80% -10%, rgba(126,227,255,0.05), transparent 60%), #05070b; 
+  overflow-x: hidden;
+}
+
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 0 1rem; 
+}
+
+.glass { 
+  background: rgba(255,255,255,0.06); 
+  border: 1px solid rgba(255,255,255,0.12); 
+  backdrop-filter: blur(8px); 
+}
+
+.pill { 
+  border-radius: 9999px; 
+}
+
+.no-scrollbar { 
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.no-scrollbar::-webkit-scrollbar { 
+  display: none; 
+}
+
+/* Enhanced Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(126, 227, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(126, 227, 255, 0.3), rgba(126, 227, 255, 0.1));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(126, 227, 255, 0.5), rgba(126, 227, 255, 0.2));
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(126, 227, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(126, 227, 255, 0.6);
+  }
+}
+
+@keyframes matrixRain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Utility Classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Selection Styles */
+::selection {
+  background: rgba(126, 227, 255, 0.2);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background: rgba(126, 227, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Focus Styles */
+*:focus-visible {
+  outline: 2px solid rgba(126, 227, 255, 0.6);
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Typography System */
+.font-display {
+  font-family: 'Michroma', 'Orbitron', 'Rajdhani', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+.font-heading {
+  font-family: 'Rajdhani', 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.font-body {
+  font-family: 'Share Tech Mono', 'Rajdhani', 'Orbitron', monospace;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.font-mono {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+/* Enhanced Animations */
+@keyframes matrixRain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes hologramFlicker {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  2% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+  4% {
+    opacity: 1;
+    filter: brightness(0.8);
+  }
+  6% {
+    opacity: 0.9;
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes dataStream {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes orbitalRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(126, 227, 255, 0.3), 0 0 40px rgba(126, 227, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(126, 227, 255, 0.6), 0 0 80px rgba(126, 227, 255, 0.3);
+  }
+}
+
+@keyframes neonFlicker {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(126, 227, 255, 0.5), 0 0 10px rgba(126, 227, 255, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(126, 227, 255, 0.8), 0 0 20px rgba(126, 227, 255, 0.5), 0 0 30px rgba(126, 227, 255, 0.3);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes energyPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+/* Animation Classes */
+.animate-matrix-rain {
+  animation: matrixRain 3s linear infinite;
+}
+
+.animate-hologram-flicker {
+  animation: hologramFlicker 0.15s ease-in-out infinite;
+}
+
+.animate-data-stream {
+  animation: dataStream 2s ease-in-out infinite;
+}
+
+.animate-orbital-rotate {
+  animation: orbitalRotate 20s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-neon-flicker {
+  animation: neonFlicker 1.5s ease-in-out infinite;
+}
+
+.animate-scan-line {
+  animation: scanLine 2s ease-in-out infinite;
+}
+
+.animate-energy-pulse {
+  animation: energyPulse 3s ease-in-out infinite;
+}
+
+/* Staggered Animation Delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1.0s; }
+
+/* Additional Utilities */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile for better performance */
+  .animate-hologram-flicker {
+    animation: none;
+  }
+  
+  .animate-neon-flicker {
+    animation: none;
+  }
+  
+  .animate-data-stream {
+    animation: none;
+  }
+  
+  /* Optimize touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve text readability on mobile */
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* Better scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Reduce motion for better performance */
+  .animate-orbital-rotate {
+    animation-duration: 30s;
+  }
+  
+  .animate-pulse-glow {
+    animation-duration: 3s;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .group:hover .group-hover\:opacity-100 {
+    opacity: 1;
+  }
+  
+  .group:hover .group-hover\:text-cyan-100 {
+    color: rgb(207 250 254);
+  }
+  
+  .group:hover .group-hover\:text-cyan-200 {
+    color: rgb(165 243 252);
+  }
+  
+  .group:hover .group-hover\:text-white {
+    color: rgb(255 255 255);
+  }
+  
+  .group:hover .group-hover\:bg-white\/\[0\.05\] {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .group:hover .group-hover\:border-cyan-200 {
+    border-color: rgb(165 243 252);
+  }
+  
+  .group:hover .group-hover\:scale-105 {
+    transform: scale(1.05);
+  }
+}
+
+/* Mobile-specific animations */
+@keyframes mobilePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+}
+
+@keyframes mobileGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(126, 227, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(126, 227, 255, 0.4);
+  }
+}
+
+.animate-mobile-pulse {
+  animation: mobilePulse 2s ease-in-out infinite;
+}
+
+.animate-mobile-glow {
+  animation: mobileGlow 2s ease-in-out infinite;
+}
+
+/* Mobile typography adjustments */
+@media (max-width: 640px) {
+  .text-4xl {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+  
+  .text-6xl {
+    font-size: 3rem;
+    line-height: 3.5rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  .text-lg {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+/* Safe area handling for mobile devices */
+@supports (padding: max(0px)) {
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+  
+  .safe-area-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Touch optimization */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Mobile viewport optimization */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific optimizations */
+  .animate-orbital-rotate {
+    animation-duration: 40s;
+  }
+  
+  .animate-pulse-glow {
+    animation-duration: 4s;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-orbital-rotate,
+  .animate-pulse-glow,
+  .animate-neon-flicker,
+  .animate-data-stream,
+  .animate-scan-line,
+  .animate-energy-pulse {
+    animation: none !important;
+  }
+}
