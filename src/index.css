@@ -415,12 +415,68 @@ body {
   }
 }
 
+@keyframes mobileOrbit {
+  0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+
+@keyframes mobileOrbit2 {
+  0% { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); }
+}
+
+@keyframes mobileOrbit3 {
+  0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+
+@keyframes mobileOrbit4 {
+  0% { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+
+@keyframes mobileOrbit5 {
+  0% { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+}
+
+@keyframes mobileOrbit6 {
+  0% { transform: rotate(0deg) translateX(210px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(210px) rotate(-360deg); }
+}
+
 .animate-mobile-pulse {
   animation: mobilePulse 2s ease-in-out infinite;
 }
 
 .animate-mobile-glow {
   animation: mobileGlow 2s ease-in-out infinite;
+}
+
+/* Mobile Solar System Optimizations */
+@media (max-width: 768px) {
+  .animate-planet-orbit { animation: mobileOrbit 15s linear infinite; }
+  .animate-planet-orbit-2 { animation: mobileOrbit2 20s linear infinite; }
+  .animate-planet-orbit-3 { animation: mobileOrbit3 25s linear infinite; }
+  .animate-planet-orbit-4 { animation: mobileOrbit4 30s linear infinite; }
+  .animate-planet-orbit-5 { animation: mobileOrbit5 35s linear infinite; }
+  .animate-planet-orbit-6 { animation: mobileOrbit6 40s linear infinite; }
+  
+  .animate-service-glow {
+    animation-duration: 3s;
+  }
+  
+  .animate-service-pulse {
+    animation-duration: 4s;
+  }
+  
+  .animate-energy-wave {
+    animation-duration: 6s;
+  }
+  
+  .solar-system-slide::before {
+    background-size: 200px 100px;
+  }
 }
 
 /* Mobile typography adjustments */
@@ -470,6 +526,20 @@ body {
   touch-action: manipulation;
 }
 
+/* Swipe gesture optimization */
+@media (hover: none) and (pointer: coarse) {
+  /* Enhanced touch feedback for mobile devices */
+  .group:active {
+    transform: scale(0.95);
+  }
+  
+  /* Better touch targets for swipe gestures */
+  button, [data-scroll-button] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
 /* Mobile viewport optimization */
 @supports (-webkit-touch-callout: none) {
   /* iOS Safari specific optimizations */
@@ -480,6 +550,309 @@ body {
   .animate-pulse-glow {
     animation-duration: 4s;
   }
+  
+  /* Solar system mobile optimizations */
+  .animate-planet-orbit,
+  .animate-planet-orbit-2,
+  .animate-planet-orbit-3,
+  .animate-planet-orbit-4,
+  .animate-planet-orbit-5,
+  .animate-planet-orbit-6 {
+    animation-duration: 60s;
+  }
+  
+  .animate-planet-rotation {
+    animation-duration: 20s;
+  }
+}
+
+/* Enhanced Solar System Animations */
+@keyframes planetOrbit {
+  0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+
+@keyframes planetOrbit2 {
+  0% { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+}
+
+@keyframes planetOrbit3 {
+  0% { transform: rotate(0deg) translateX(240px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(240px) rotate(-360deg); }
+}
+
+@keyframes planetOrbit4 {
+  0% { transform: rotate(0deg) translateX(300px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(300px) rotate(-360deg); }
+}
+
+@keyframes planetOrbit5 {
+  0% { transform: rotate(0deg) translateX(360px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(360px) rotate(-360deg); }
+}
+
+@keyframes planetOrbit6 {
+  0% { transform: rotate(0deg) translateX(420px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(420px) rotate(-360deg); }
+}
+
+/* Enhanced Service Planet Animations */
+@keyframes serviceGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(126, 227, 255, 0.3), 0 0 20px rgba(126, 227, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(126, 227, 255, 0.6), 0 0 40px rgba(126, 227, 255, 0.3);
+  }
+}
+
+@keyframes servicePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes orbitalRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes energyWave {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes planetRotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes solarGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.3), 0 0 40px rgba(255, 165, 0, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(255, 165, 0, 0.6), 0 0 80px rgba(255, 165, 0, 0.3);
+  }
+}
+
+@keyframes asteroidBelt {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes comet {
+  0% { 
+    transform: translateX(-100px) translateY(-50px);
+    opacity: 0;
+  }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { 
+    transform: translateX(100vw) translateY(-100px);
+    opacity: 0;
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Animation Classes */
+.animate-planet-orbit { animation: planetOrbit 20s linear infinite; }
+.animate-planet-orbit-2 { animation: planetOrbit2 30s linear infinite; }
+.animate-planet-orbit-3 { animation: planetOrbit3 40s linear infinite; }
+.animate-planet-orbit-4 { animation: planetOrbit4 50s linear infinite; }
+.animate-planet-orbit-5 { animation: planetOrbit5 60s linear infinite; }
+.animate-planet-orbit-6 { animation: planetOrbit6 70s linear infinite; }
+.animate-planet-rotation { animation: planetRotation 10s linear infinite; }
+.animate-slide-up { animation: slideUp 0.8s ease-out; }
+.animate-slide-down { animation: slideDown 0.8s ease-out; }
+.animate-solar-glow { animation: solarGlow 3s ease-in-out infinite; }
+.animate-asteroid-belt { animation: asteroidBelt 15s linear infinite; }
+.animate-comet { animation: comet 8s linear infinite; }
+.animate-star-twinkle { animation: starTwinkle 2s ease-in-out infinite; }
+
+/* Enhanced Service Animations */
+.animate-service-glow { animation: serviceGlow 2s ease-in-out infinite; }
+.animate-service-pulse { animation: servicePulse 3s ease-in-out infinite; }
+.animate-orbital-ring { animation: orbitalRing 20s linear infinite; }
+.animate-energy-wave { animation: energyWave 4s ease-in-out infinite; }
+
+/* Advanced Webapp Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes energyPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes hologramFlicker {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  2% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+  4% {
+    opacity: 1;
+    filter: brightness(0.8);
+  }
+  6% {
+    opacity: 0.9;
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes dataStream {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Animation Classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+.animate-scan-line {
+  animation: scanLine 2s ease-in-out infinite;
+}
+
+.animate-energy-pulse {
+  animation: energyPulse 3s ease-in-out infinite;
+}
+
+.animate-hologram-flicker {
+  animation: hologramFlicker 0.15s ease-in-out infinite;
+}
+
+.animate-data-stream {
+  animation: dataStream 2s ease-in-out infinite;
+}
+
+/* Enhanced Solar System Slide Styles */
+.solar-system-slide {
+  background: 
+    radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%),
+    radial-gradient(ellipse at 30% 20%, rgba(126, 227, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(168, 85, 247, 0.02) 0%, transparent 50%);
+  position: relative;
+  overflow: hidden;
+}
+
+.solar-system-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 160px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 200px 50px, rgba(126,227,255,0.8), transparent),
+    radial-gradient(1px 1px at 250px 120px, rgba(168,85,247,0.6), transparent);
+  background-repeat: repeat;
+  background-size: 300px 150px;
+  animation: starTwinkle 6s ease-in-out infinite;
+}
+
+.solar-system-slide::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(126, 227, 255, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.08) 0%, transparent 25%);
+  animation: energyWave 8s ease-in-out infinite;
 }
 
 /* Reduce motion for users who prefer it */
@@ -495,7 +868,13 @@ body {
   .animate-neon-flicker,
   .animate-data-stream,
   .animate-scan-line,
-  .animate-energy-pulse {
+  .animate-energy-pulse,
+  .animate-planet-orbit,
+  .animate-planet-rotation,
+  .animate-solar-glow,
+  .animate-asteroid-belt,
+  .animate-comet,
+  .animate-star-twinkle {
     animation: none !important;
   }
 }
