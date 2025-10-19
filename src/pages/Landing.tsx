@@ -2,7 +2,184 @@
 import Starfield from "../three/Starfield"
 import TopNav from "../components/TopNav"
 import BootSequence from "../components/BootSequence"
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+  type WheelEvent as ReactWheelEvent
+} from "react"
+
+type ExperienceItem = {
+  emoji: string
+  label: string
+}
+
+type ExperienceStage = {
+  id: "services" | "industries" | "hire"
+  title: string
+  subtitle: string
+  description: string
+  accent: "cyan" | "magenta" | "emerald"
+  items: ExperienceItem[]
+  primaryAction?: { label: string; targetStage?: number; href?: string }
+  secondaryAction?: { label: string; targetStage?: number }
+}
+
+const SERVICE_ITEMS: ExperienceItem[] = [
+  { emoji: "🖥️", label: "ICT Services" },
+  { emoji: "💻", label: "Software Development" },
+  { emoji: "📱", label: "Mobile App Development" },
+  { emoji: "📡", label: "IoT Development" },
+  { emoji: "🧠", label: "IT Consulting" },
+  { emoji: "🛠️", label: "Managed IT Services" },
+  { emoji: "⛓️", label: "Blockchain Services" },
+  { emoji: "☁️", label: "Cloud Computing Services" },
+  { emoji: "🔄", label: "DevOps" },
+  { emoji: "🥽", label: "AR/VR Development" },
+  { emoji: "🛡️", label: "Cybersecurity Services" },
+  { emoji: "📊", label: "Data Analytics" },
+  { emoji: "⚙️", label: "Digital Transformation" },
+  { emoji: "🤖", label: "Artificial Intelligence" },
+  { emoji: "🧾", label: "ERP Software Development" },
+  { emoji: "🎮", label: "2D/3D Game Development" },
+  { emoji: "🕸️", label: "Web Dev & Design" }
+]
+
+const INDUSTRY_ITEMS: ExperienceItem[] = [
+  { emoji: "🚕", label: "Taxi" },
+  { emoji: "📦", label: "On Demand" },
+  { emoji: "🛒", label: "Ecommerce" },
+  { emoji: "💳", label: "Fintech" },
+  { emoji: "💞", label: "Dating & Chatting" },
+  { emoji: "👥", label: "Social Networking" },
+  { emoji: "🏋️", label: "Fitness" },
+  { emoji: "🌾", label: "Agriculture" },
+  { emoji: "🚚", label: "Logistics" },
+  // { emoji: "🛢️", label: "Oil and Gas" },
+  { emoji: "📡", label: "Telecom" },
+  { emoji: "🏗️", label: "Construction" },
+  { emoji: "🛡️", label: "Insurance" },
+  { emoji: "✈️", label: "Aviation" },
+  { emoji: "🏭", label: "Manufacturing" },
+  { emoji: "🏛️", label: "NGO" },
+  { emoji: "📚", label: "eLearning" },
+  { emoji: "🍽️", label: "Restaurant" },
+  { emoji: "🎬", label: "Entertainment" },
+  { emoji: "🧳", label: "Travel" },
+  { emoji: "🛴", label: "E-scooter" },
+  { emoji: "🎪", label: "Events" },
+  { emoji: "🚗", label: "Automotive" },
+  { emoji: "🏥", label: "Health Care" },
+  { emoji: "🖥️", label: "SaaS" },
+  { emoji: "🕹️", label: "Games" },
+  { emoji: "🧘", label: "Wellness" },
+  // { emoji: "🗳️", label: "Politics" },
+  { emoji: "⚡️", label: "EV" },
+  { emoji: "🏦", label: "Banking" },
+  { emoji: "🏢", label: "Real Estate" },
+  { emoji: "📰", label: "News" }
+]
+
+const HIRE_ITEMS: ExperienceItem[] = [
+  { emoji: "⛓️", label: "Blockchain Developers" },
+  { emoji: "🔁", label: "Cross Platform Developers" },
+  { emoji: "🔧", label: "DevOps Developers" },
+  { emoji: "🌀", label: "Drupal Developers" },
+  { emoji: "🦋", label: "Flutter Developers" },
+  { emoji: "🔘", label: "Ionic App Developers" },
+  { emoji: "📲", label: "iPad Developers" },
+  { emoji: "📱", label: "iPhone App Developers" },
+  { emoji: "📳", label: "Mobile App Developers" },
+  { emoji: "🐘", label: "PHP Developers" },
+  { emoji: "⚛️", label: "React Native Developers" },
+  { emoji: "📝", label: "WordPress Developers" },
+  { emoji: "🧩", label: "Xamarin Developers" },
+  { emoji: "🧵", label: "Joomla Developers" },
+  { emoji: "🛍️", label: "Magento Developers" },
+  { emoji: "🤖", label: "Android App Developers" }
+]
+
+const EXPERIENCE_STAGES: ExperienceStage[] = [
+  {
+    id: "services",
+    title: "Our Services",
+    subtitle: "Full-spectrum digital execution",
+    description:
+      "From core ICT modernisation to immersive experiences, CaveBeat delivers end-to-end product, platform, and infrastructure innovation.",
+    accent: "cyan",
+    items: SERVICE_ITEMS,
+    primaryAction: { label: "Explore Industries", targetStage: 1 },
+    secondaryAction: { label: "Return to Landing", targetStage: -1 }
+  },
+  {
+    id: "industries",
+    title: "Industries",
+    subtitle: "",
+    description:
+      "We engineer solutions for movers, makers, dreamers, and disruptors across the globe. Scroll through the ecosystems we already power.",
+    accent: "magenta",
+    items: INDUSTRY_ITEMS,
+    primaryAction: { label: "Explore Hiring Options", targetStage: 2 },
+    secondaryAction: { label: "Back to Services", targetStage: 0 }
+  },
+  {
+    id: "hire",
+    title: "Hire Us",
+    subtitle: "Craft your dream team",
+    description:
+      "Plug specialised CaveBeat squads directly into your roadmap. Mix, match, and mobilise elite engineers without slowing delivery.",
+    accent: "emerald",
+    items: HIRE_ITEMS,
+    primaryAction: { label: "Hire Team", href: "mailto:hello@cavebeat.com?subject=Hire%20the%20CaveBeat%20team" },
+    secondaryAction: { label: "Back to Industries", targetStage: 1 }
+  }
+]
+
+const ACCENT_STYLES: Record<
+  ExperienceStage["accent"],
+  {
+    primaryBase: string
+    primaryOverlay: string
+    headerGradient: string
+    focusRing: string
+    highlightBorder: string
+  }
+> = {
+  cyan: {
+    primaryBase:
+      "group relative inline-flex items-center justify-center rounded-full border border-cyan-200/60 bg-gradient-to-r from-[#0d1f2b]/85 via-[#113144]/85 to-[#0d1f2b]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-all duration-300 hover:from-[#123548]/90 hover:via-[#17445a]/90 hover:to-[#123548]/90 hover:text-white focus:outline-none",
+    primaryOverlay:
+      "pointer-events-none absolute inset-px rounded-full bg-gradient-to-r from-cyan-200/12 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+    headerGradient: "bg-gradient-to-r from-cyan-200 via-blue-200 to-teal-200",
+    focusRing: "focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/70",
+    highlightBorder: "border-cyan-200/40"
+  },
+  magenta: {
+    primaryBase:
+      "group relative inline-flex items-center justify-center rounded-full border border-fuchsia-200/60 bg-gradient-to-r from-[#24102e]/85 via-[#2f1442]/85 to-[#24102e]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-100 transition-all duration-300 hover:from-[#2d1642]/90 hover:via-[#3a1a59]/90 hover:to-[#2d1642]/90 hover:text-white focus:outline-none",
+    primaryOverlay:
+      "pointer-events-none absolute inset-px rounded-full bg-gradient-to-r from-fuchsia-200/12 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+    headerGradient: "bg-gradient-to-r from-fuchsia-200 via-pink-200 to-purple-200",
+    focusRing: "focus-visible:outline focus-visible:outline-2 focus-visible:outline-fuchsia-200/70",
+    highlightBorder: "border-fuchsia-200/40"
+  },
+  emerald: {
+    primaryBase:
+      "group relative inline-flex items-center justify-center rounded-full border border-emerald-200/60 bg-gradient-to-r from-[#102c24]/85 via-[#154034]/85 to-[#102c24]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100 transition-all duration-300 hover:from-[#134033]/90 hover:via-[#1a5545]/90 hover:to-[#134033]/90 hover:text-white focus:outline-none",
+    primaryOverlay:
+      "pointer-events-none absolute inset-px rounded-full bg-gradient-to-r from-emerald-200/12 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+    headerGradient: "bg-gradient-to-r from-emerald-200 via-teal-200 to-lime-200",
+    focusRing: "focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-200/70",
+    highlightBorder: "border-emerald-200/40"
+  }
+}
+
+const SECONDARY_BUTTON_BASE =
+  "group relative inline-flex items-center justify-center rounded-full border border-white/25 bg-white/[0.06] px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-white/70 transition-all duration-300 hover:bg-white/[0.12] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/60"
 
 type LandingProps = {
   contactMode?: boolean
@@ -27,48 +204,205 @@ export default function Landing({ contactMode = false }: LandingProps){
     setBooting(false)
   },[])
 
-  // Simple swipe detection
-  useEffect(() => {
-    let startY = 0
-    
-    const handleTouchStart = (e: TouchEvent) => {
-      startY = e.touches[0].clientY
-    }
-    
-    const handleTouchEnd = (e: TouchEvent) => {
-      const endY = e.changedTouches[0].clientY
-      const deltaY = startY - endY
-      
-      if (deltaY > 100) {
-        window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })
-      } else if (deltaY < -100) {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-    }
-    
-    document.addEventListener('touchstart', handleTouchStart, { passive: true })
-    document.addEventListener('touchend', handleTouchEnd, { passive: true })
-    
-    return () => {
-      document.removeEventListener('touchstart', handleTouchStart)
-      document.removeEventListener('touchend', handleTouchEnd)
-    }
+  const SECTION_COUNT = EXPERIENCE_STAGES.length
+  const [experienceProgress, setExperienceProgress] = useState(0)
+  const pointerState = useRef<{ pointerId: number | null; startY: number; startProgress: number }>({
+    pointerId: null,
+    startY: 0,
+    startProgress: 0
+  })
+
+  const clampProgress = useCallback((value: number) => {
+    if (value < 0) return 0
+    if (value > SECTION_COUNT) return SECTION_COUNT
+    return value
   }, [])
+
+  const interactionsLocked = booting || contactMode
+
+  useEffect(() => {
+    if (contactMode) {
+      setExperienceProgress(0)
+      pointerState.current = { pointerId: null, startY: 0, startProgress: 0 }
+    }
+  }, [contactMode])
+
+  const settleProgress = useCallback((value: number) => {
+    if (value <= 0) return 0
+    if (value >= SECTION_COUNT - 0.05) return SECTION_COUNT
+    const snapped = Math.round(value)
+    return Math.max(0, Math.min(SECTION_COUNT, snapped))
+  }, [SECTION_COUNT])
+
+  const handlePointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    if (interactionsLocked) {
+      return
+    }
+    if (event.target instanceof HTMLElement && event.target.closest('a,button,[data-skip-swipe]')) {
+      pointerState.current = { pointerId: null, startY: 0, startProgress: experienceProgress }
+      return
+    }
+    if (event.pointerType === "mouse" && event.buttons !== 1) {
+      return
+    }
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1
+    const startFraction = event.clientY / viewportHeight
+    const canEngageFromPosition = experienceProgress > 0.1 || startFraction <= 0.55
+    if (!canEngageFromPosition) {
+      pointerState.current = { pointerId: null, startY: 0, startProgress: experienceProgress }
+      return
+    }
+    pointerState.current = {
+      pointerId: event.pointerId,
+      startY: event.clientY,
+      startProgress: experienceProgress
+    }
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId)
+    } catch (_error) {
+      // ignore pointer capture errors
+    }
+  }, [experienceProgress, interactionsLocked])
+
+  const handlePointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const state = pointerState.current
+    if (interactionsLocked || state.pointerId !== event.pointerId) {
+      return
+    }
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1
+    const delta = (event.clientY - state.startY) / (viewportHeight * 1.2)
+    let next = state.startProgress
+    if (delta > 0) {
+      // downward motion reveals additional sections
+      next = clampProgress(state.startProgress + delta)
+    } else if (state.startProgress > 0) {
+      // upward motion only closes when a layer is already visible
+      next = clampProgress(state.startProgress + delta)
+    }
+    setExperienceProgress(next)
+    event.preventDefault()
+  }, [clampProgress, interactionsLocked])
+
+  const finishPointerInteraction = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const state = pointerState.current
+    if (state.pointerId !== event.pointerId) {
+      return
+    }
+    const settled = settleProgress(experienceProgress)
+    setExperienceProgress(settled)
+    pointerState.current = { pointerId: null, startY: 0, startProgress: settled }
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    } catch (_error) {
+      // ignore release errors
+    }
+  }, [experienceProgress, settleProgress])
+
+  const handleWheel = useCallback((event: ReactWheelEvent<HTMLDivElement>) => {
+    if (interactionsLocked) {
+      return
+    }
+    if (Math.abs(event.deltaY) < 2) {
+      return
+    }
+    event.preventDefault()
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1
+    const delta = event.deltaY / (viewportHeight * 1.6)
+    setExperienceProgress(prev => {
+      if (prev <= 0 && delta <= 0) {
+        return 0
+      }
+      return clampProgress(prev + delta)
+    })
+  }, [clampProgress, interactionsLocked])
+
+  useEffect(() => {
+    if (interactionsLocked) {
+      pointerState.current = { pointerId: null, startY: 0, startProgress: 0 }
+    }
+  }, [interactionsLocked])
+
+  const openServices = useCallback((stageIndex = 0) => {
+    if (!interactionsLocked) {
+      const target = Math.max(0, Math.min(SECTION_COUNT, stageIndex + 1))
+      pointerState.current = { pointerId: null, startY: 0, startProgress: target }
+      setExperienceProgress(target)
+    }
+  }, [SECTION_COUNT, interactionsLocked])
+
+  const closeServices = useCallback(() => {
+    pointerState.current = { pointerId: null, startY: 0, startProgress: 0 }
+    setExperienceProgress(0)
+  }, [])
+
+  const navigateToStage = useCallback((stageIndex: number) => {
+    if (stageIndex < 0) {
+      closeServices()
+      return
+    }
+    const target = Math.max(0, Math.min(SECTION_COUNT, stageIndex + 1))
+    pointerState.current = { pointerId: null, startY: 0, startProgress: target }
+    setExperienceProgress(target)
+  }, [SECTION_COUNT, closeServices])
+
+  const pointerActive = pointerState.current.pointerId !== null
+  const effectiveProgress = contactMode ? 0 : Math.min(experienceProgress, 1)
+
+  const heroEffectStyle = useMemo<CSSProperties>(() => {
+    const blur = (effectiveProgress * 18).toFixed(2)
+    const scale = (1 - effectiveProgress * 0.05).toFixed(3)
+    return {
+      filter: `blur(${blur}px)`,
+      transform: `scale(${scale})`,
+      transition: pointerActive ? "none" : "filter 220ms ease, transform 220ms ease",
+      willChange: "filter, transform"
+    }
+  }, [effectiveProgress, pointerActive])
+
+  const touchActionValue = useMemo(() => {
+    if (contactMode || interactionsLocked) {
+      return "auto"
+    }
+    if (experienceProgress > 0.05) {
+      return "pan-y"
+    }
+    return "none"
+  }, [contactMode, experienceProgress, interactionsLocked])
 
   return (
     <>
       {booting && !contactMode && <BootSequence onComplete={handleBootComplete}/>}
-      <div className={`relative min-h-screen overflow-hidden transition-opacity duration-700 ${booting && !contactMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <Starfield/>
-        <TopNav contactActive={contactMode}/>
-        <CornerTagline/>
-        <CenterMedallion dimmed={contactMode}/>
-        {!contactMode && <ScrollCue/>}
-        {contactMode && <ContactOverlay/>}
+      <div
+        className="relative min-h-screen overflow-hidden"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={finishPointerInteraction}
+        onPointerCancel={finishPointerInteraction}
+        onWheel={handleWheel}
+        style={{ touchAction: touchActionValue }}
+      >
+        <div
+          className={`relative min-h-screen overflow-hidden transition-opacity duration-700 ${booting && !contactMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          style={{
+            ...heroEffectStyle,
+            ...(contactMode ? { pointerEvents: "auto" } : {})
+          }}
+        >
+          <Starfield/>
+          <TopNav contactActive={contactMode}/>
+          <CornerTagline/>
+          <CenterMedallion dimmed={contactMode}/>
+          {contactMode && <ContactOverlay/>}
+        </div>
+
+        <OurServicesSection
+          progress={experienceProgress}
+          onRequestClose={closeServices}
+          onRequestOpen={openServices}
+          onNavigateToStage={navigateToStage}
+          stageCount={SECTION_COUNT}
+        />
       </div>
-      
-      {/* Our Services Section - Swipe Access Only */}
-      <OurServicesSection />
     </>
   )
 }
@@ -372,507 +706,210 @@ function GlobeAura(){
   )
 }
 
-function ScrollCue(){
-  const [clickCount, setClickCount] = useState(0)
-  const [lastClickTime, setLastClickTime] = useState(0)
-
-  // Reset click count after 2 seconds
-  useEffect(() => {
-    if (clickCount > 0) {
-      const timer = setTimeout(() => {
-        setClickCount(0)
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [clickCount])
-
-  const handleScroll = () => {
-    const now = Date.now()
-    
-    // Double-click detection (within 500ms)
-    if (now - lastClickTime < 500) {
-      console.log('Double-click detected - opening services!')
-      // Trigger services section
-      const event = new CustomEvent('openServices')
-      document.dispatchEvent(event)
-      setClickCount(0)
-      return
-    }
-    
-    setLastClickTime(now)
-    setClickCount(prev => prev + 1)
-    
-    // Single click - normal scroll
-    console.log('Single click - scrolling down')
-    window.scrollBy({ top: window.innerHeight, behavior: "smooth" })
-  }
-
-  return (
-    <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-cyan-100/80 max-md:bottom-10">
-      <button
-        type="button"
-        onClick={handleScroll}
-        className="flex flex-col items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/60 text-[0.7rem] tracking-[0.45em] uppercase font-semibold max-md:text-[0.55rem] max-md:tracking-[0.3em] group"
-        style={{fontFamily:'"Rajdhani", "Orbitron", "Bank Gothic", "Segoe UI", sans-serif'}}
-      >
-        <span className="text-cyan-100/70 group-hover:text-cyan-100 transition-colors duration-300">
-          {clickCount > 0 ? 'Double-click for Services' : 'Scroll Down'}
-        </span>
-        <div className="relative w-16 h-16 max-md:w-14 max-md:h-14 group-hover:scale-105 transition-transform duration-300">
-          <div className="absolute inset-0 rounded-full border border-cyan-200/35 group-hover:border-cyan-200/60 transition-colors duration-300" style={{boxShadow:'0 0 18px rgba(126,227,255,0.35)'}}/>
-          <div className="absolute inset-[6px] rounded-full border border-cyan-100/20 bg-[#0b1a23]/60 max-md:inset-[5px] group-hover:bg-[#0b1a23]/80 transition-colors duration-300" style={{boxShadow:'inset 0 0 14px rgba(126,227,255,0.18)'}}/>
-          <svg
-            className="absolute inset-0 m-auto h-6 w-6 text-cyan-100/80 group-hover:text-cyan-100 transition-colors duration-300"
-            viewBox="0 0 24 24"
-            role="img"
-            aria-hidden="true"
-            style={{animation:'arrowFloat 2.4s ease-in-out infinite'}}
-          >
-            <defs>
-              <linearGradient id="scroll-arrow" x1="0" y1="0" x2="0" y2="24">
-                <stop offset="0%" stopColor="#7ee3ff" />
-                <stop offset="100%" stopColor="#99f6e4" />
-              </linearGradient>
-            </defs>
-            <path d="M12 3v12.6" stroke="url(#scroll-arrow)" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M7 12.6L12 18l5-5.4" fill="none" stroke="url(#scroll-arrow)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-      </button>
-      
-      {/* Hint text */}
-      <div className="text-xs text-cyan-100/40 tracking-[0.2em] uppercase font-mono animate-pulse">
-        Double-click for Services
-      </div>
-    </div>
-  )
-}
-
-
-
-// Our Services Solar System Component - Swipe Access Only
-function OurServicesSection() {
-  const sectionRef = useRef<HTMLDivElement | null>(null)
+function OurServicesSection({
+  progress,
+  onRequestClose,
+  onRequestOpen,
+  onNavigateToStage,
+  stageCount
+}: {
+  progress: number
+  onRequestClose?: () => void
+  onRequestOpen?: (stageIndex?: number) => void
+  onNavigateToStage?: (stageIndex: number) => void
+  stageCount: number
+}) {
   const prefersReducedMotion = usePrefersReducedMotion()
-  const [isActive, setIsActive] = useState(false)
-  const [hasEntered, setHasEntered] = useState(false)
-  const [hoveredService, setHoveredService] = useState<number | null>(null)
-  const [swipeStartY, setSwipeStartY] = useState(0)
-  const [swipeStartX, setSwipeStartX] = useState(0)
-  const DEBUG_MODE = false
-  const shouldAnimate = !prefersReducedMotion && (isActive || DEBUG_MODE)
+  const [hoveredItem, setHoveredItem] = useState<number | null>(null)
 
-  // Enhanced interaction detection for services section
   useEffect(() => {
-    if (DEBUG_MODE) {
-      setIsActive(true)
-      setHasEntered(true)
-      return
+    if (progress < 0.05 && hoveredItem !== null) {
+      setHoveredItem(null)
     }
+  }, [hoveredItem, progress])
 
-    // Listen for custom event from ScrollCue double-click
-    const handleOpenServices = () => {
-      console.log('Custom event received - opening services')
-      setIsActive(true)
-      setHasEntered(true)
-    }
-
-    // Touch events for mobile swipe
-    const handleTouchStart = (e: TouchEvent) => {
-      setSwipeStartY(e.touches[0].clientY)
-      setSwipeStartX(e.touches[0].clientX)
-    }
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const endY = e.changedTouches[0].clientY
-      const endX = e.changedTouches[0].clientX
-      const deltaY = swipeStartY - endY
-      const deltaX = swipeStartX - endX
-      
-      // Swipe left to open services
-      if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 80) {
-        console.log('Swipe left detected - opening services')
-        setIsActive(true)
-        setHasEntered(true)
-      }
-      // Swipe right to close services
-      else if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX < -80) {
-        console.log('Swipe right detected - closing services')
-        setIsActive(false)
-      }
-    }
-
-    // Mouse events for Mac trackpad gestures
-    const handleMouseDown = (e: MouseEvent) => {
-      if (e.button === 0) { // Left mouse button
-        setSwipeStartY(e.clientY)
-        setSwipeStartX(e.clientX)
-      }
-    }
-
-    const handleMouseUp = (e: MouseEvent) => {
-      if (e.button === 0) { // Left mouse button
-        const deltaY = swipeStartY - e.clientY
-        const deltaX = swipeStartX - e.clientX
-        
-        // Trackpad swipe left to open services
-        if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 100) {
-          console.log('Trackpad swipe left detected - opening services')
-          setIsActive(true)
-          setHasEntered(true)
-        }
-        // Trackpad swipe right to close services
-        else if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX < -100) {
-          console.log('Trackpad swipe right detected - closing services')
-          setIsActive(false)
-        }
-      }
-    }
-
-    // Keyboard shortcuts
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey && e.key === 's') {
-        e.preventDefault()
-        setIsActive(!isActive)
-        if (!hasEntered) setHasEntered(true)
-      }
-      // Escape key to close
-      if (e.key === 'Escape' && isActive) {
-        setIsActive(false)
-      }
-    }
-
-    // Add all event listeners
-    document.addEventListener('openServices', handleOpenServices)
-    document.addEventListener('touchstart', handleTouchStart, { passive: true })
-    document.addEventListener('touchend', handleTouchEnd, { passive: true })
-    document.addEventListener('mousedown', handleMouseDown)
-    document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('openServices', handleOpenServices)
-      document.removeEventListener('touchstart', handleTouchStart)
-      document.removeEventListener('touchend', handleTouchEnd)
-      document.removeEventListener('mousedown', handleMouseDown)
-      document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [swipeStartY, swipeStartX, isActive, hasEntered, DEBUG_MODE])
-
-  const services = [
-    {
-      name: 'AI Development',
-      description: 'Advanced artificial intelligence solutions',
-      color: 'from-purple-400 to-purple-600',
-      icon: '🤖',
-      orbit: 'animate-planet-orbit',
-      size: 'w-4 h-4',
-      offset: 120,
-      angle: 0
-    },
-    {
-      name: 'Cloud Solutions',
-      description: 'Scalable cloud infrastructure',
-      color: 'from-blue-400 to-blue-600',
-      icon: '☁️',
-      orbit: 'animate-planet-orbit-2',
-      size: 'w-5 h-5',
-      offset: 180,
-      angle: 60
-    },
-    {
-      name: 'Data Analytics',
-      description: 'Insights from your data universe',
-      color: 'from-green-400 to-green-600',
-      icon: '📊',
-      orbit: 'animate-planet-orbit-3',
-      size: 'w-6 h-6',
-      offset: 240,
-      angle: 120
-    },
-    {
-      name: 'Cybersecurity',
-      description: 'Protecting your digital galaxy',
-      color: 'from-red-400 to-red-600',
-      icon: '🛡️',
-      orbit: 'animate-planet-orbit-4',
-      size: 'w-5 h-5',
-      offset: 300,
-      angle: 180
-    },
-    {
-      name: 'IoT Solutions',
-      description: 'Connected device ecosystems',
-      color: 'from-orange-400 to-orange-600',
-      icon: '🌐',
-      orbit: 'animate-planet-orbit-5',
-      size: 'w-7 h-7',
-      offset: 360,
-      angle: 240
-    },
-    {
-      name: 'Blockchain',
-      description: 'Decentralized technology solutions',
-      color: 'from-yellow-400 to-yellow-600',
-      icon: '⛓️',
-      orbit: 'animate-planet-orbit-6',
-      size: 'w-6 h-6',
-      offset: 420,
-      angle: 300
-    }
-  ]
   const starField = useMemo(
     () =>
-      Array.from({ length: 80 }, (_, index) => {
+      Array.from({ length: 90 }, (_, index) => {
         const base = index + 1
-        const left = (base * 37) % 100
-        const top = (base * 23) % 100
-        const delay = (base % 12) * 0.25
-        const duration = 2 + (base % 6) * 0.45
         return {
           key: `star-${index}`,
-          left: `${left}%`,
-          top: `${top}%`,
-          delay: `${delay}s`,
-          duration: `${duration}s`
+          left: `${(base * 29) % 100}%`,
+          top: `${(base * 17) % 100}%`,
+          delay: (base % 9) * 0.2,
+          duration: 2.2 + (base % 6) * 0.45,
+          depth: 30 + (base % 8) * 10
         }
       }),
     []
   )
 
-  // Don't render if not active
-  if (!isActive && !DEBUG_MODE) {
+  if (progress <= 0.001) {
     return null
+  }
+
+  const normalized = Math.max(progress - 1e-6, 0)
+  const stageIndex = Math.min(
+    EXPERIENCE_STAGES.length - 1,
+    Math.floor(Math.min(normalized, EXPERIENCE_STAGES.length - 1 + 0.999))
+  )
+  const stageProgress = Math.min(1, normalized - stageIndex)
+  const stage = EXPERIENCE_STAGES[stageIndex]
+  const accent = ACCENT_STYLES[stage.accent]
+  const overlayPresence = Math.min(1, Math.pow(progress / Math.max(stageCount, 1), 0.8))
+  const animate = !prefersReducedMotion && overlayPresence > 0.04
+  const stageEase = prefersReducedMotion ? 1 : Math.pow(Math.max(stageProgress, 0), 0.85)
+
+  const gridTemplate =
+    stage.items.length > 24
+      ? "repeat(auto-fit,minmax(150px,1fr))"
+      : "repeat(auto-fit,minmax(160px,1fr))"
+
+  const handlePrimary = () => {
+    if (stage.primaryAction?.targetStage !== undefined) {
+      onNavigateToStage?.(stage.primaryAction.targetStage)
+      return
+    }
+    if (stage.primaryAction?.href) {
+      if (typeof window !== "undefined") {
+        window.open(stage.primaryAction.href, "_blank", "noopener,noreferrer")
+      }
+      return
+    }
+    onRequestOpen?.()
+  }
+
+  const handleSecondary = () => {
+    if (!stage.secondaryAction) {
+      onRequestClose?.()
+      return
+    }
+    if (stage.secondaryAction.targetStage !== undefined) {
+      if (stage.secondaryAction.targetStage < 0) {
+        onRequestClose?.()
+      } else {
+        onNavigateToStage?.(stage.secondaryAction.targetStage)
+      }
+      return
+    }
+    onRequestClose?.()
   }
 
   return (
     <section
-      id="services"
-      ref={sectionRef}
-      className={`fixed inset-0 z-40 transition-all duration-700 ease-out ${
-        isActive || DEBUG_MODE ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
+      aria-hidden={progress <= 0.001}
+      className="fixed inset-0 z-40 flex items-center justify-center"
+      style={{ pointerEvents: progress > 0.02 ? "auto" : "none" }}
     >
-      {/* Transparent blur background */}
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-md" />
-      
-      {/* Animated Solar System Background */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-[1000px] h-[1000px] max-md:w-[95vw] max-md:h-[95vw]">
-          {/* Enhanced Background Stars */}
-          <div className="absolute inset-0">
-            {starField.map(star => (
-              <div
-                key={star.key}
-                className="absolute h-1 w-1 rounded-full bg-white animate-star-twinkle"
-                style={{
-                  left: star.left,
-                  top: star.top,
-                  animationDelay: star.delay,
-                  animationDuration: star.duration
-                }}
-              />
-            ))}
-          </div>
+      <div
+        className="absolute inset-0 bg-[#030b14]"
+        style={{ opacity: Math.min(1, 0.35 + overlayPresence * 0.65), transition: "opacity 220ms ease" }}
+      />
 
-          {/* Multiple Shooting Stars */}
-          <div className="absolute left-0 top-1/4 h-2 w-2 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-200 to-transparent animate-comet" />
-          <div className="absolute right-0 top-3/4 h-1 w-1 translate-x-1/2 rounded-full bg-gradient-to-l from-purple-200 to-transparent animate-comet" style={{ animationDelay: "2s" }} />
-          <div className="absolute left-1/4 top-0 h-1 w-1 -translate-y-1/2 rounded-full bg-gradient-to-b from-green-200 to-transparent animate-comet" style={{ animationDelay: "4s" }} />
-          <div className="absolute right-1/4 bottom-0 h-1 w-1 translate-y-1/2 rounded-full bg-gradient-to-t from-orange-200 to-transparent animate-comet" style={{ animationDelay: "6s" }} />
-
-          {/* Orbital Rings */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-cyan-200/10 rounded-full animate-asteroid-belt" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-cyan-200/10 rounded-full animate-asteroid-belt" style={{ animationDelay: "1s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-cyan-200/10 rounded-full animate-asteroid-belt" style={{ animationDelay: "2s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-cyan-200/10 rounded-full animate-asteroid-belt" style={{ animationDelay: "3s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-cyan-200/10 rounded-full animate-asteroid-belt" style={{ animationDelay: "4s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-cyan-200/10 rounded-full animate-asteroid-belt" style={{ animationDelay: "5s" }} />
-
-          {/* Service Planets */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            {services.map((service, i) => (
-              <div
-                key={service.name}
-                className={`group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${
-                  shouldAnimate ? service.orbit : ""
-                } cursor-pointer focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/60`}
-                style={
-                  shouldAnimate
-                    ? undefined
-                    : { transform: `translate(-50%, -50%) rotate(${service.angle}deg) translateX(${service.offset}px)` }
-                }
-                onMouseEnter={() => setHoveredService(i)}
-                onMouseLeave={() => setHoveredService(null)}
-                onFocus={() => setHoveredService(i)}
-                onBlur={() => setHoveredService(null)}
-                role="button"
-                tabIndex={0}
-                aria-label={service.name}
-              >
-                <div
-                  className={`${service.size} relative rounded-full bg-gradient-to-br ${service.color} ${
-                    shouldAnimate ? "animate-planet-rotation" : ""
-                  } group-hover:scale-125 transition-all duration-500 shadow-lg group-hover:shadow-2xl`}
-                  style={{
-                    boxShadow: hoveredService === i ? `0 0 30px ${service.color.includes('purple') ? '#a78bfa' : service.color.includes('blue') ? '#60a5fa' : service.color.includes('green') ? '#4ade80' : service.color.includes('red') ? '#f87171' : service.color.includes('orange') ? '#fb923c' : service.color.includes('yellow') ? '#facc15' : '#7ee3ff'}` : '0 0 10px rgba(126,227,255,0.3)'
-                  }}
-                >
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
-                  <div
-                    className="absolute inset-0 flex items-center justify-center text-xs"
-                    style={shouldAnimate ? undefined : { transform: `rotate(${-service.angle}deg)` }}
-                  >
-                    {service.icon}
-                  </div>
-                  
-                  {/* Service Label */}
-                  <div
-                    className={`absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap transition-all duration-500 ${
-                      hoveredService === i ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-75 translate-y-2"
-                    }`}
-                  >
-                    <div className="bg-black/80 backdrop-blur-md border border-cyan-200/30 rounded-xl px-4 py-2 shadow-lg">
-                      <span className="font-heading text-sm font-semibold text-cyan-200">{service.name}</span>
-                    </div>
-                  </div>
-
-                  {/* Energy Trail */}
-                  <div className={`absolute inset-0 rounded-full transition-opacity duration-500 ${
-                    hoveredService === i ? "opacity-100" : "opacity-0"
-                  }`}>
-                    <div className={`absolute inset-0 rounded-full animate-ping ${
-                      service.color.includes('purple') ? 'bg-purple-400/30' :
-                      service.color.includes('blue') ? 'bg-blue-400/30' :
-                      service.color.includes('green') ? 'bg-green-400/30' :
-                      service.color.includes('red') ? 'bg-red-400/30' :
-                      service.color.includes('orange') ? 'bg-orange-400/30' :
-                      service.color.includes('yellow') ? 'bg-yellow-400/30' :
-                      'bg-cyan-400/30'
-                    }`} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="absolute inset-0 overflow-hidden">
+        {starField.map(star => (
+          <div
+            key={star.key}
+            className="absolute h-1 w-1 rounded-full bg-white"
+            style={{
+              left: star.left,
+              top: star.top,
+              opacity: 0.15 + overlayPresence * 0.75,
+              transform: `translate3d(0, ${(1 - overlayPresence) * star.depth}px, 0)`,
+              transition: "opacity 200ms ease, transform 200ms ease",
+              animation: animate ? `starTwinkle ${star.duration}s ease-in-out infinite` : "none",
+              animationDelay: animate ? `${star.delay}s` : undefined
+            }}
+          />
+        ))}
       </div>
 
-      {/* Animated Services Info Panel */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-6xl mx-auto px-6">
-        <div className="relative bg-black/60 backdrop-blur-2xl border border-cyan-200/40 rounded-3xl p-8 text-center shadow-[0_0_80px_rgba(126,227,255,0.3)] animate-fade-in-scale">
-          {/* Animated Background Glow */}
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-blue-500/5 animate-pulse" />
-          
-          {/* Title with Animation */}
-          <div className="relative z-10">
-            <h2 className="text-4xl md:text-6xl font-light tracking-[0.1em] text-white/90 mb-4 font-display animate-fade-in-up">
-              <span className="bg-gradient-to-r from-cyan-200 via-blue-200 to-purple-200 bg-clip-text text-transparent">
-                OUR SERVICES
-              </span>
+      <div
+        className="relative z-10 w-[min(94vw,1080px)] max-w-6xl rounded-3xl border border-white/10 bg-black/40 px-4 py-7 text-white shadow-[0_0_60px_rgba(126,227,255,0.25)] backdrop-blur-2xl transition-[opacity,transform] sm:px-8 sm:py-10"
+        style={{
+          opacity: Math.min(1, 0.4 + stageEase * 0.7),
+          transform: `translateY(${(1 - stageEase) * 80}px) scale(${0.92 + stageEase * 0.08})`,
+          transitionDuration: animate ? "240ms" : "120ms",
+          transitionTimingFunction: "cubic-bezier(0.22,0.61,0.36,1)"
+        }}
+      >
+        <div className="flex h-full flex-col gap-6 sm:gap-8">
+          <div className="flex flex-col items-center gap-4 px-1 text-center sm:px-2">
+            <h2 className="font-display text-3xl font-light uppercase tracking-[0.1em] text-white/90 sm:text-4xl md:text-6xl">
+              <span className={`${accent.headerGradient} bg-clip-text text-transparent`}>{stage.title}</span>
             </h2>
-            
-            {/* Animated Divider */}
-            <div className="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-cyan-200/60 to-transparent mb-6 animate-scan-line" />
-            
-            {/* Description with Typewriter Effect */}
-            <p className="text-lg text-cyan-100/80 max-w-3xl mx-auto mb-8 font-body animate-fade-in-up" style={{animationDelay: '0.5s'}}>
-              Navigate through our constellation of cutting-edge services. Each service planet orbits around our core mission 
-              to deliver innovative solutions that propel your business into the future.
+            <div className="mx-auto h-px w-20 bg-gradient-to-r from-transparent via-white/40 to-transparent sm:w-28" />
+            <p className="mx-auto max-w-3xl font-body text-sm text-white/70 sm:text-base md:text-lg">
+              {stage.subtitle}
             </p>
-            
-            {/* Interactive Service Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-              {services.map((service, i) => (
+            <p className="mx-auto max-w-4xl font-body text-xs text-white/55 sm:text-sm md:text-base">
+              {stage.description}
+            </p>
+          </div>
+
+          <div
+            className="relative flex-1 overflow-y-auto pb-2 pr-1 sm:pr-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{
+              opacity: Math.min(1, stageEase * 1.15),
+              transform: `translateY(${(1 - stageEase) * 24}px)`,
+              transition: "opacity 200ms ease, transform 220ms ease"
+            }}
+          >
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-4 bg-gradient-to-l from-black/35 to-transparent" />
+            <div className="grid gap-2 sm:gap-3 md:gap-4" style={{ gridTemplateColumns: gridTemplate }}>
+              {stage.items.map((item, index) => (
                 <div
-                  key={`${service.name}-card`}
-                  className={`group relative cursor-pointer rounded-xl border border-white/10 bg-white/[0.02] p-4 backdrop-blur-sm transition-all duration-500 hover:bg-white/[0.05] hover:scale-110 hover:rotate-1 ${
-                    hoveredService === i ? "scale-110 border-cyan-200/40 bg-cyan-200/5 shadow-lg shadow-cyan-200/20" : ""
-                  } animate-fade-in-up`}
-                  style={{animationDelay: `${0.8 + i * 0.1}s`}}
-                  onMouseEnter={() => setHoveredService(i)}
-                  onMouseLeave={() => setHoveredService(null)}
+                  key={`${stage.id}-${item.label}`}
+                  className={`group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-left transition-all duration-300 hover:bg-white/[0.08] sm:px-4 sm:py-3 ${
+                    hoveredItem === index ? `${accent.highlightBorder} bg-white/[0.1]` : ""
+                  }`}
+                  onMouseEnter={() => setHoveredItem(index)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                  onFocus={() => setHoveredItem(index)}
+                  onBlur={() => setHoveredItem(null)}
+                  tabIndex={0}
                 >
-                  {/* Card Glow Effect */}
-                  <div className={`absolute inset-0 rounded-xl transition-opacity duration-500 ${
-                    hoveredService === i ? "opacity-100" : "opacity-0"
-                  }`}>
-                    <div className={`absolute inset-0 rounded-xl ${
-                      service.color.includes('purple') ? 'bg-purple-500/10' :
-                      service.color.includes('blue') ? 'bg-blue-500/10' :
-                      service.color.includes('green') ? 'bg-green-500/10' :
-                      service.color.includes('red') ? 'bg-red-500/10' :
-                      service.color.includes('orange') ? 'bg-orange-500/10' :
-                      service.color.includes('yellow') ? 'bg-yellow-500/10' :
-                      'bg-cyan-500/10'
-                    }`} />
-                  </div>
-                  
-                  <div className="relative z-10">
-                    <div
-                      className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${service.color} ${
-                        shouldAnimate ? "animate-planet-rotation" : ""
-                      } group-hover:scale-125 transition-all duration-500 shadow-lg group-hover:shadow-2xl`}
-                      style={{ 
-                        animationDelay: `${i * 0.5}s`,
-                        boxShadow: hoveredService === i ? `0 0 20px ${service.color.includes('purple') ? '#a78bfa' : service.color.includes('blue') ? '#60a5fa' : service.color.includes('green') ? '#4ade80' : service.color.includes('red') ? '#f87171' : service.color.includes('orange') ? '#fb923c' : service.color.includes('yellow') ? '#facc15' : '#7ee3ff'}` : '0 0 10px rgba(126,227,255,0.3)'
-                      }}
-                    >
-                      <span className="text-lg">{service.icon}</span>
-                    </div>
-                    <h3 className="font-heading text-sm font-semibold text-cyan-200 transition-colors duration-300 group-hover:text-white">{service.name}</h3>
-                    <p className="font-body text-xs text-cyan-100/60 transition-colors duration-300 group-hover:text-cyan-100/80">{service.description}</p>
-                  </div>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-black/45 text-lg sm:h-10 sm:w-10">
+                    {item.emoji}
+                  </span>
+                  <span className="font-heading text-xs uppercase tracking-[0.08em] text-white/80 transition-colors duration-300 group-hover:text-white sm:text-sm">
+                    {item.label}
+                  </span>
                 </div>
               ))}
             </div>
+          </div>
 
-            {/* Animated Call to Action */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{animationDelay: '1.5s'}}>
+          <div
+            className="mt-2 flex flex-col items-center justify-center gap-3 sm:mt-4 sm:flex-row sm:gap-4"
+            style={{
+              opacity: Math.min(1, Math.max(0, stageEase - 0.25) * 1.4),
+              transform: `translateY(${(1 - stageEase) * 20}px)`,
+              transition: "opacity 220ms ease, transform 220ms ease"
+            }}
+          >
+            {stage.primaryAction && (
               <button
                 type="button"
-                onClick={() => {
-                  console.log('Return to Home clicked - closing services')
-                  setIsActive(false)
-                  setHasEntered(false)
-                  window.scrollTo({ top: 0, behavior: "smooth" })
-                }}
-                className="group flex items-center gap-3 px-8 py-4 border border-cyan-200/40 bg-gradient-to-r from-cyan-200/10 to-transparent hover:from-cyan-200/20 hover:to-cyan-200/10 transition-all duration-300 text-cyan-200 font-semibold tracking-[0.1em] uppercase font-heading rounded-full hover:scale-105 hover:shadow-lg hover:shadow-cyan-200/20"
+                onClick={handlePrimary}
+                className={`${accent.primaryBase} ${accent.focusRing} w-full sm:w-auto`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
-                </svg>
-                Return to Home
+                <span className="relative z-10">{stage.primaryAction.label}</span>
+                <span className={accent.primaryOverlay} />
               </button>
-            </div>
+            )}
+            <button
+              type="button"
+              onClick={handleSecondary}
+              className={`${SECONDARY_BUTTON_BASE} w-full sm:w-auto`}
+            >
+              <span className="relative z-10">
+                {stage.secondaryAction ? stage.secondaryAction.label : "Return to Landing"}
+              </span>
+              <span className="pointer-events-none absolute inset-px rounded-full bg-white/[0.08] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </button>
           </div>
         </div>
-      </div>
-
-      {/* Close Button */}
-      <div className="absolute top-8 right-8 z-50">
-        <button
-          type="button"
-          onClick={() => {
-            console.log('Close button clicked - closing services')
-            setIsActive(false)
-            setHasEntered(false)
-          }}
-          className="group flex items-center justify-center w-12 h-12 rounded-full border border-cyan-200/40 bg-black/20 backdrop-blur-sm hover:bg-cyan-200/10 transition-all duration-300 text-cyan-200 hover:text-white"
-          aria-label="Close Services"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Section Indicator */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 flex items-center gap-2 text-cyan-200/60">
-        <div className="w-2 h-2 rounded-full bg-cyan-200/40 animate-pulse" />
-        <span className="text-sm tracking-[0.2em] uppercase font-mono">Services Active</span>
-        <div className="w-2 h-2 rounded-full bg-cyan-200/40 animate-pulse" />
       </div>
     </section>
   )
