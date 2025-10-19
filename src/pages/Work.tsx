@@ -1,5 +1,6 @@
 import Starfield from "../three/Starfield"
 import TopNav from "../components/TopNav"
+import HireTeamModal from "../components/HireTeamModal"
 import { useCallback, useEffect, useState } from "react"
 
 type Client = {
@@ -137,6 +138,7 @@ const ACCENT_STYLES = {
 
 export default function Work() {
   const [hoveredCase, setHoveredCase] = useState<string | null>(null)
+  const [hireTeamModalOpen, setHireTeamModalOpen] = useState(false)
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#030b14]">
@@ -294,17 +296,28 @@ export default function Work() {
             <p className="mb-8 text-white/70">
               Let's transform your ideas into digital reality
             </p>
-            <a
-              href="mailto:hello@cavebeat.com?subject=New%20Project%20Inquiry"
-              className="group relative inline-flex items-center justify-center rounded-full border border-cyan-200/60 bg-gradient-to-r from-[#0d1f2b]/85 via-[#113144]/85 to-[#0d1f2b]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-all duration-300 hover:from-[#123548]/90 hover:via-[#17445a]/90 hover:to-[#123548]/90 hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/70"
-            >
-              <span className="relative z-10">Get Started</span>
-              <span className="pointer-events-none absolute inset-px rounded-full bg-gradient-to-r from-cyan-200/12 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="mailto:hello@cavebeat.com?subject=New%20Project%20Inquiry"
+                className="group relative inline-flex items-center justify-center rounded-full border border-cyan-200/60 bg-gradient-to-r from-[#0d1f2b]/85 via-[#113144]/85 to-[#0d1f2b]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-all duration-300 hover:from-[#123548]/90 hover:via-[#17445a]/90 hover:to-[#123548]/90 hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/70"
+              >
+                <span className="relative z-10">Get Started</span>
+                <span className="pointer-events-none absolute inset-px rounded-full bg-gradient-to-r from-cyan-200/12 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </a>
+              <button
+                onClick={() => setHireTeamModalOpen(true)}
+                className="group relative inline-flex items-center justify-center rounded-full border border-emerald-200/60 bg-gradient-to-r from-[#102c24]/85 via-[#154034]/85 to-[#102c24]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100 transition-all duration-300 hover:from-[#134033]/90 hover:via-[#1a5545]/90 hover:to-[#134033]/90 hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-200/70"
+              >
+                <span className="relative z-10">Hire Team</span>
+                <span className="pointer-events-none absolute inset-px rounded-full bg-gradient-to-r from-emerald-200/12 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
+      <HireTeamModal isOpen={hireTeamModalOpen} onClose={() => setHireTeamModalOpen(false)}/>
+      
       <style>{`
         @keyframes fadeInUp {
           from {

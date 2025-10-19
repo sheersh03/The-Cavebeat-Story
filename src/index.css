@@ -10,6 +10,23 @@ html, body, #root {
   scroll-behavior: smooth;
 }
 
+/* Cursor and Pointer Optimizations */
+* {
+  cursor: default;
+}
+
+button, a, input, textarea, select, [role="button"], [role="link"] {
+  cursor: pointer;
+}
+
+button:disabled, input:disabled, textarea:disabled, select:disabled {
+  cursor: not-allowed;
+}
+
+input[type="text"], input[type="email"], input[type="tel"], textarea {
+  cursor: text;
+}
+
 body { 
   background: radial-gradient(900px 600px at 80% -10%, rgba(126,227,255,0.05), transparent 60%), #05070b; 
   overflow-x: hidden;

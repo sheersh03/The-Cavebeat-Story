@@ -4,6 +4,8 @@ import TopNav from "../components/TopNav"
 import BootSequence from "../components/BootSequence"
 import PrivacyNotice from "../components/PrivacyNotice"
 import NewsletterSignup from "../components/NewsletterSignup"
+import InnovationLab from "../components/InnovationLab"
+import HireTeamModal from "../components/HireTeamModal"
 import {
   useCallback,
   useEffect,
@@ -136,7 +138,7 @@ const EXPERIENCE_STAGES: ExperienceStage[] = [
       "Plug specialised CaveBeat squads directly into your roadmap. Mix, match, and mobilise elite engineers without slowing delivery.",
     accent: "emerald",
     items: HIRE_ITEMS,
-    primaryAction: { label: "Hire Team", href: "mailto:hello@cavebeat.com?subject=Hire%20the%20CaveBeat%20team" },
+    primaryAction: { label: "Hire Team", targetStage: -1 },
     secondaryAction: { label: "Back to Industries", targetStage: 1 }
   }
 ]
@@ -196,6 +198,8 @@ export default function Landing({ contactMode = false }: LandingProps){
   const [booting, setBooting] = useState(initialBoot)
   const [privacyNoticeOpen, setPrivacyNoticeOpen] = useState(false)
   const [newsletterOpen, setNewsletterOpen] = useState(false)
+  const [innovationLabOpen, setInnovationLabOpen] = useState(false)
+  const [hireTeamModalOpen, setHireTeamModalOpen] = useState(false)
 
   useEffect(()=>{
     if(contactMode){
@@ -242,7 +246,8 @@ export default function Landing({ contactMode = false }: LandingProps){
     if (interactionsLocked) {
       return
     }
-    if (event.target instanceof HTMLElement && event.target.closest('a,button,[data-skip-swipe]')) {
+    // Skip pointer events on interactive elements to preserve normal cursor behavior
+    if (event.target instanceof HTMLElement && event.target.closest('a,button,input,textarea,select,[data-skip-swipe],[role="button"],[role="link"]')) {
       pointerState.current = { pointerId: null, startY: 0, startProgress: experienceProgress }
       return
     }
@@ -487,9 +492,10 @@ export default function Landing({ contactMode = false }: LandingProps){
           <CornerTagline/>
           <CenterMedallion dimmed={contactMode}/>
           {!contactMode && <ScrollArrow onOpenServices={openServices} interactionsLocked={interactionsLocked}/>}
-          {contactMode && <ContactOverlay onOpenPrivacy={() => setPrivacyNoticeOpen(true)} onOpenNewsletter={() => setNewsletterOpen(true)}/>}
+          {contactMode && <ContactOverlay onOpenPrivacy={() => setPrivacyNoticeOpen(true)} onOpenNewsletter={() => setNewsletterOpen(true)} onOpenInnovationLab={() => setInnovationLabOpen(true)}/>}
           <PrivacyNotice isOpen={privacyNoticeOpen} onClose={() => setPrivacyNoticeOpen(false)}/>
           <NewsletterSignup isOpen={newsletterOpen} onClose={() => setNewsletterOpen(false)}/>
+          <InnovationLab isOpen={innovationLabOpen} onClose={() => setInnovationLabOpen(false)}/>
         </div>
 
         <OurServicesSection
@@ -498,7 +504,12 @@ export default function Landing({ contactMode = false }: LandingProps){
           onRequestOpen={openServices}
           onNavigateToStage={navigateToStage}
           stageCount={SECTION_COUNT}
+          setHireTeamModalOpen={setHireTeamModalOpen}
+          isHireTeamModalOpen={hireTeamModalOpen}
         />
+        
+        {/* Modal at the highest level */}
+        <HireTeamModal isOpen={hireTeamModalOpen} onClose={() => setHireTeamModalOpen(false)}/>
       </div>
     </>
   )
@@ -627,7 +638,7 @@ type SocialIcon = {
 
 import { Link } from "react-router-dom"
 
-function ContactOverlay({ onOpenPrivacy, onOpenNewsletter }: { onOpenPrivacy: () => void; onOpenNewsletter: () => void }){
+function ContactOverlay({ onOpenPrivacy, onOpenNewsletter, onOpenInnovationLab }: { onOpenPrivacy: () => void; onOpenNewsletter: () => void; onOpenInnovationLab: () => void }){
   const socials: SocialIcon[] = [
     {
       name:'Instagram',
@@ -682,7 +693,7 @@ function ContactOverlay({ onOpenPrivacy, onOpenNewsletter }: { onOpenPrivacy: ()
             <span>✕</span>
           </Link>
         </div>
-        <div className="flex items-center justify-center gap-4 text-[0.65rem] tracking-[0.6em] uppercase text-cyan-100/70 max-md:text-[0.55rem]" style={{fontFamily:'"Rajdhani", "Orbitron", "Share Tech Mono", sans-serif'}}>
+        <div className="flex items-center justify-center gap-4 text-[0.65rem] tracking-[0.6em] uppercase text-cyan-100/70 max-md:text-[0.55rem]" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
           <span className="text-cyan-300 text-base">✶</span>
           <span>Contact Us</span>
           <span className="text-cyan-300 text-base">✶</span>
@@ -704,7 +715,7 @@ function ContactOverlay({ onOpenPrivacy, onOpenNewsletter }: { onOpenPrivacy: ()
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-xs uppercase tracking-[0.35em] text-white/70 max-md:w-full max-md:gap-8" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
           <div className="flex flex-col items-center gap-3">
-            <span className="text-white/60">Social</span>
+            <span className="text-white/60" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>Social</span>
             <div className="flex items-center gap-4 text-white/80">
               {socials.map(({name, href, viewBox, path, accent})=>{
                 const style: CSSProperties | undefined = accent ? {
@@ -727,17 +738,22 @@ function ContactOverlay({ onOpenPrivacy, onOpenNewsletter }: { onOpenPrivacy: ()
             </div>
           </div>
           <div className="flex flex-col items-center gap-3">
-            <span className="text-white/60">Access</span>
+            <span className="text-white/60" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>Access</span>
             <div className="flex flex-col gap-2 text-[0.65rem] text-white/70 max-md:text-[0.62rem]">
-              <button onClick={onOpenPrivacy} className="hover:text-white text-left">Privacy Notice</button>
-              <button onClick={onOpenNewsletter} className="hover:text-white text-left">Newsletter Signup</button>
+              <button onClick={onOpenPrivacy} className="hover:text-white text-left" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>Privacy Notice</button>
+              <button onClick={onOpenNewsletter} className="hover:text-white text-left" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>Newsletter Signup</button>
             </div>
           </div>
           <div className="flex flex-col items-center gap-3">
-            <span className="text-white/60">Mobile Sync</span>
-            <div className="relative flex items-center justify-center w-24 h-24 rounded-lg border border-white/20 bg-black/40 shadow-[0_0_20px_rgba(126,227,255,0.15)] max-md:w-20 max-md:h-20">
-              <span className="text-[0.5rem] tracking-[0.35em] text-white/50">QR</span>
-            </div>
+            <span className="text-white/60" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>Innovation Lab</span>
+            <button 
+              onClick={onOpenInnovationLab}
+              className="group relative flex items-center justify-center w-24 h-24 rounded-lg border border-cyan-200/30 bg-gradient-to-br from-cyan-200/10 to-blue-200/10 shadow-[0_0_20px_rgba(126,227,255,0.25)] hover:shadow-[0_0_30px_rgba(126,227,255,0.4)] transition-all duration-300 hover:scale-105 max-md:w-20 max-md:h-20"
+            >
+              <div className="text-2xl group-hover:scale-110 transition-transform duration-300">🧪</div>
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-200/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+            <span className="text-[0.5rem] tracking-[0.35em] text-white/50 text-center">Explore Tech</span>
           </div>
         </div>
       </div>
@@ -856,13 +872,17 @@ function OurServicesSection({
   onRequestClose,
   onRequestOpen,
   onNavigateToStage,
-  stageCount
+  stageCount,
+  setHireTeamModalOpen,
+  isHireTeamModalOpen
 }: {
   progress: number
   onRequestClose?: () => void
   onRequestOpen?: (stageIndex?: number) => void
   onNavigateToStage?: (stageIndex: number) => void
   stageCount: number
+  setHireTeamModalOpen: (open: boolean) => void
+  isHireTeamModalOpen: boolean
 }) {
   const prefersReducedMotion = usePrefersReducedMotion()
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
@@ -911,6 +931,10 @@ function OurServicesSection({
       : "repeat(auto-fit,minmax(160px,1fr))"
 
   const handlePrimary = () => {
+    if (stage.primaryAction?.targetStage === -1) {
+      setHireTeamModalOpen(true)
+      return
+    }
     if (stage.primaryAction?.targetStage !== undefined) {
       onNavigateToStage?.(stage.primaryAction.targetStage)
       return
@@ -944,7 +968,10 @@ function OurServicesSection({
     <section
       aria-hidden={progress <= 0.001}
       className="fixed inset-0 z-40 flex items-center justify-center"
-      style={{ pointerEvents: progress > 0.02 ? "auto" : "none" }}
+      style={{ 
+        pointerEvents: progress > 0.02 ? "auto" : "none",
+        display: isHireTeamModalOpen ? "none" : "flex"
+      }}
     >
       <div
         className="absolute inset-0 bg-[#030b14]"
