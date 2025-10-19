@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -54,9 +54,16 @@ type TopNavProps = {
 }
 
 export default function TopNav({ contactActive = false }: TopNavProps){
+  const location = useLocation()
+  const isWorkPage = location.pathname === '/work'
+  
   return (
     <div className="fixed top-4 right-4 z-20 max-md:left-1/2 max-md:-translate-x-1/2 max-md:right-auto max-md:w-[88vw] max-md:flex max-md:justify-center">
-      <WorkContactPill contactActive={contactActive}/>
+      {isWorkPage ? (
+        <CloseButton />
+      ) : (
+        <WorkContactPill contactActive={contactActive}/>
+      )}
     </div>
   )
 }
@@ -167,6 +174,56 @@ function WorkContactPill({ contactActive }: { contactActive: boolean }){
           </linearGradient>
         </defs>
       </motion.svg>
+    </div>
+  )
+}
+
+function CloseButton() {
+  const [hovered, setHovered] = useState(false)
+  const amp = useSpring(0, { stiffness: 180, damping: 16 })
+
+  useEffect(() => {
+    amp.set(hovered ? 7 : 0)
+  }, [hovered, amp])
+
+  const pulse = useTransform(amp, [0, 7], [0.35, 1])
+  const glow = useTransform(pulse, v => 0.25 + (v - 0.35) * 0.6)
+
+  return (
+    <div 
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="glass pill shadow-glow px-4 py-2 max-md:w-full max-md:px-3 max-md:py-[0.5rem]"
+    >
+      <Link
+        to="/"
+        className="flex items-center justify-center gap-2 text-sm tracking-wider uppercase text-white/90 hover:text-white font-[550] max-md:text-[0.82rem]"
+        aria-label="Close and return to landing page"
+      >
+        <motion.div
+          animate={hovered ? { rotate: 90 } : { rotate: 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="flex items-center justify-center w-5 h-5 rounded-full border border-white/30 hover:border-white/60 transition-colors duration-200"
+        >
+          <svg 
+            width="12" 
+            height="12" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="text-white/80"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </motion.div>
+        <span style={{fontFamily:'"Share Tech Mono", "Rajdhani", "Orbitron", monospace'}}>
+          CLOSE
+        </span>
+      </Link>
     </div>
   )
 }

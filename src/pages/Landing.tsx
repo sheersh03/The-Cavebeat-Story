@@ -2,6 +2,8 @@
 import Starfield from "../three/Starfield"
 import TopNav from "../components/TopNav"
 import BootSequence from "../components/BootSequence"
+import PrivacyNotice from "../components/PrivacyNotice"
+import NewsletterSignup from "../components/NewsletterSignup"
 import {
   useCallback,
   useEffect,
@@ -192,6 +194,8 @@ export default function Landing({ contactMode = false }: LandingProps){
   },[contactMode])
 
   const [booting, setBooting] = useState(initialBoot)
+  const [privacyNoticeOpen, setPrivacyNoticeOpen] = useState(false)
+  const [newsletterOpen, setNewsletterOpen] = useState(false)
 
   useEffect(()=>{
     if(contactMode){
@@ -369,6 +373,93 @@ export default function Landing({ contactMode = false }: LandingProps){
     return "none"
   }, [contactMode, experienceProgress, interactionsLocked])
 
+  // Mobile-specific touch handling
+  const isMobile = useMemo(() => {
+    if (typeof window === 'undefined') return false
+    return window.innerWidth < 768
+  }, [])
+
+  const handleTouchStart = useCallback((event: React.TouchEvent<HTMLDivElement>) => {
+    if (interactionsLocked || !isMobile) return
+    
+    const touch = event.touches[0]
+    if (touch) {
+      const syntheticEvent = {
+        ...event,
+        clientY: touch.clientY,
+        pointerId: touch.identifier,
+        pointerType: 'touch' as const,
+        buttons: 1,
+        pressure: 0.5,
+        tangentialPressure: 0,
+        tiltX: 0,
+        tiltY: 0,
+        twist: 0,
+        width: 0,
+        height: 0,
+        isPrimary: true,
+        getCoalescedEvents: () => [],
+        getPredictedEvents: () => []
+      } as unknown as ReactPointerEvent<HTMLDivElement>
+      
+      handlePointerDown(syntheticEvent)
+    }
+  }, [interactionsLocked, isMobile, handlePointerDown])
+
+  const handleTouchMove = useCallback((event: React.TouchEvent<HTMLDivElement>) => {
+    if (interactionsLocked || !isMobile) return
+    
+    const touch = event.touches[0]
+    if (touch) {
+      const syntheticEvent = {
+        ...event,
+        clientY: touch.clientY,
+        pointerId: touch.identifier,
+        pointerType: 'touch' as const,
+        buttons: 1,
+        pressure: 0.5,
+        tangentialPressure: 0,
+        tiltX: 0,
+        tiltY: 0,
+        twist: 0,
+        width: 0,
+        height: 0,
+        isPrimary: true,
+        getCoalescedEvents: () => [],
+        getPredictedEvents: () => []
+      } as unknown as ReactPointerEvent<HTMLDivElement>
+      
+      handlePointerMove(syntheticEvent)
+    }
+  }, [interactionsLocked, isMobile, handlePointerMove])
+
+  const handleTouchEnd = useCallback((event: React.TouchEvent<HTMLDivElement>) => {
+    if (interactionsLocked || !isMobile) return
+    
+    const touch = event.changedTouches[0]
+    if (touch) {
+      const syntheticEvent = {
+        ...event,
+        clientY: touch.clientY,
+        pointerId: touch.identifier,
+        pointerType: 'touch' as const,
+        buttons: 0,
+        pressure: 0,
+        tangentialPressure: 0,
+        tiltX: 0,
+        tiltY: 0,
+        twist: 0,
+        width: 0,
+        height: 0,
+        isPrimary: true,
+        getCoalescedEvents: () => [],
+        getPredictedEvents: () => []
+      } as unknown as ReactPointerEvent<HTMLDivElement>
+      
+      finishPointerInteraction(syntheticEvent)
+    }
+  }, [interactionsLocked, isMobile, finishPointerInteraction])
+
   return (
     <>
       {booting && !contactMode && <BootSequence onComplete={handleBootComplete}/>}
@@ -378,6 +469,9 @@ export default function Landing({ contactMode = false }: LandingProps){
         onPointerMove={handlePointerMove}
         onPointerUp={finishPointerInteraction}
         onPointerCancel={finishPointerInteraction}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onWheel={handleWheel}
         style={{ touchAction: touchActionValue }}
       >
@@ -392,7 +486,10 @@ export default function Landing({ contactMode = false }: LandingProps){
           <TopNav contactActive={contactMode}/>
           <CornerTagline/>
           <CenterMedallion dimmed={contactMode}/>
-          {contactMode && <ContactOverlay/>}
+          {!contactMode && <ScrollArrow onOpenServices={openServices} interactionsLocked={interactionsLocked}/>}
+          {contactMode && <ContactOverlay onOpenPrivacy={() => setPrivacyNoticeOpen(true)} onOpenNewsletter={() => setNewsletterOpen(true)}/>}
+          <PrivacyNotice isOpen={privacyNoticeOpen} onClose={() => setPrivacyNoticeOpen(false)}/>
+          <NewsletterSignup isOpen={newsletterOpen} onClose={() => setNewsletterOpen(false)}/>
         </div>
 
         <OurServicesSection
@@ -409,8 +506,8 @@ export default function Landing({ contactMode = false }: LandingProps){
 
 function CenterMedallion({ dimmed = false }: { dimmed?: boolean }){
   return (
-    <div className="absolute inset-0 flex items-center justify-center select-none">
-      <div className={`relative w-[240px] h-[240px] md:w-[300px] md:h-[300px] max-md:w-[65vw] max-md:h-[65vw] transition-all duration-700 ${dimmed ? 'opacity-40 scale-95' : 'opacity-100 scale-100'}`}>
+    <div className="absolute inset-0 flex items-center justify-center select-none px-4">
+      <div className={`relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[300px] md:h-[300px] max-sm:w-[60vw] max-sm:h-[60vw] transition-all duration-700 ${dimmed ? 'opacity-40 scale-95' : 'opacity-100 scale-100'}`}>
         <div className="absolute inset-0 rounded-full"
              style={{boxShadow:'inset 0 0 40px rgba(126,227,255,0.3), 0 0 80px rgba(126,227,255,0.25)'}}/>
         <div className="absolute inset-2 rounded-full border border-white/20"
@@ -439,8 +536,8 @@ function CornerTagline(){
   const caretShouldPulse = !prefersReducedMotion && complete
 
   return (
-    <div className="hidden md:flex fixed top-6 left-6 z-20 max-w-sm xl:max-w-md">
-      <div className="relative overflow-hidden px-4 py-3 rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-[0_0_25px_rgba(126,227,255,0.2)]">
+    <div className="hidden sm:flex fixed top-4 left-4 z-20 max-w-xs sm:max-w-sm xl:max-w-md">
+      <div className="relative overflow-hidden px-3 py-2 sm:px-4 sm:py-3 rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-[0_0_25px_rgba(126,227,255,0.2)]">
         <span className="pointer-events-none absolute -inset-px rounded-xl opacity-60 blur-lg bg-[radial-gradient(circle_at_top_left,rgba(126,227,255,0.38),rgba(126,227,255,0))]" aria-hidden="true"/>
         <span className="pointer-events-none absolute inset-0 rounded-xl border border-cyan-200/20" aria-hidden="true"/>
         <span className="pointer-events-none absolute inset-x-3 top-[1.5rem] h-px bg-gradient-to-r from-transparent via-cyan-100/40 to-transparent" aria-hidden="true"/>
@@ -530,7 +627,7 @@ type SocialIcon = {
 
 import { Link } from "react-router-dom"
 
-function ContactOverlay(){
+function ContactOverlay({ onOpenPrivacy, onOpenNewsletter }: { onOpenPrivacy: () => void; onOpenNewsletter: () => void }){
   const socials: SocialIcon[] = [
     {
       name:'Instagram',
@@ -575,10 +672,10 @@ function ContactOverlay(){
   ]
 
   return (
-    <div className="absolute inset-0 z-30 flex items-center justify-center px-6 py-16 max-md:px-4 max-md:pt-24 max-md:pb-20 text-white">
+    <div className="absolute inset-0 z-30 flex items-center justify-center px-4 sm:px-6 py-12 sm:py-16 text-white safe-area-top safe-area-bottom">
       <div className="absolute inset-0 bg-[#030b14]/80 backdrop-blur-2xl" />
       <GlobeAura/>
-      <div className="relative w-full max-w-5xl flex flex-col gap-12 text-center max-md:gap-8 max-md:items-center overflow-y-auto">
+      <div className="relative w-full max-w-5xl flex flex-col gap-8 sm:gap-12 text-center items-center overflow-y-auto max-h-[90vh]">
         <div className="flex justify-center max-md:w-full">
           <Link to="/" replace className="inline-flex items-center gap-2 px-5 py-2 border border-emerald-300/40 bg-black/20 rounded-full text-xs tracking-[0.35em] uppercase text-emerald-200/80 hover:text-emerald-200 hover:border-emerald-200 transition max-md:px-4" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
             <span>Close</span>
@@ -632,8 +729,8 @@ function ContactOverlay(){
           <div className="flex flex-col items-center gap-3">
             <span className="text-white/60">Access</span>
             <div className="flex flex-col gap-2 text-[0.65rem] text-white/70 max-md:text-[0.62rem]">
-              <a href="#privacy" className="hover:text-white">Privacy Notice</a>
-              <a href="#newsletter" className="hover:text-white">Newsletter Signup</a>
+              <button onClick={onOpenPrivacy} className="hover:text-white text-left">Privacy Notice</button>
+              <button onClick={onOpenNewsletter} className="hover:text-white text-left">Newsletter Signup</button>
             </div>
           </div>
           <div className="flex flex-col items-center gap-3">
@@ -703,6 +800,54 @@ function GlobeAura(){
       </div>
       <style>{`@keyframes globeSpin{to{transform:rotate(360deg)}}`}</style>
     </div>
+  )
+}
+
+function ScrollArrow({ onOpenServices, interactionsLocked }: { onOpenServices?: (stageIndex?: number) => void; interactionsLocked?: boolean }) {
+  const handleScrollClick = useCallback(() => {
+    if (interactionsLocked) {
+      return
+    }
+    
+    // Use the proper function to open the services section
+    onOpenServices?.(0)
+  }, [onOpenServices, interactionsLocked])
+
+  return (
+    <button
+      onClick={handleScrollClick}
+      className="group fixed bottom-6 sm:bottom-8 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2 text-cyan-200/70 transition-all duration-300 hover:text-cyan-100 hover:scale-105 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/70 touch-manipulation"
+      aria-label="Click to explore our services"
+    >
+      <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center">
+        {/* Outer glow ring */}
+        <div className="absolute inset-0 rounded-full bg-cyan-200/20 blur-sm group-hover:bg-cyan-200/30 transition-colors duration-300" />
+        
+        {/* Main arrow container - properly centered */}
+        <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-cyan-200/30 bg-black/20 backdrop-blur-sm transition-all duration-300 group-hover:border-cyan-200/50 group-hover:bg-black/30">
+          {/* Animated arrow - properly centered */}
+          <svg 
+            className="h-5 w-5 text-current transition-transform duration-300 group-hover:translate-y-0.5" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M12 5v14M5 12l7 7 7-7" />
+          </svg>
+        </div>
+        
+        {/* Pulsing animation ring */}
+        <div className="absolute inset-0 rounded-full border border-cyan-200/20 animate-pulse" />
+      </div>
+      
+      {/* Click indicator text */}
+      <span className="text-xs tracking-[0.15em] uppercase opacity-70 group-hover:opacity-100 transition-opacity duration-300" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+        Click Here
+      </span>
+    </button>
   )
 }
 

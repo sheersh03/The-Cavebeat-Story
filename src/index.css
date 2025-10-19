@@ -566,6 +566,62 @@ body {
   }
 }
 
+/* Additional mobile optimizations */
+@media (max-width: 640px) {
+  /* Improve text readability on small screens */
+  .text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  /* Better spacing for mobile */
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+  
+  .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  /* Optimize button sizes for touch */
+  button, [role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Improve modal spacing */
+  .modal-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+}
+
+/* Enhanced mobile touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  /* Active states for better touch feedback */
+  button:active,
+  [role="button"]:active,
+  .touch-target:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  .hover\:opacity-100:hover {
+    opacity: 1;
+  }
+}
+
 /* Enhanced Solar System Animations */
 @keyframes planetOrbit {
   0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
