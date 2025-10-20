@@ -47,9 +47,9 @@ export async function handleHireTeamSubmission(formData: Omit<HireTeamSubmission
     
     console.log('✅ Form validation passed, sending to backend...')
     
-    // Send to backend API
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-    const response = await fetch(`${apiUrl}/api/hire-team`, {
+    // Send to Vercel API route
+    const apiUrl = import.meta.env.VITE_API_URL || '/api'
+    const response = await fetch(`${apiUrl}/hire-team`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
