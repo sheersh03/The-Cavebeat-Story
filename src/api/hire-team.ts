@@ -48,7 +48,9 @@ export async function handleHireTeamSubmission(formData: Omit<HireTeamSubmission
     console.log('✅ Form validation passed, sending to backend...')
     
     // Send to Vercel API route
-    const apiUrl = import.meta.env.VITE_API_URL || '/api'
+    const apiUrl =
+      import.meta.env.VITE_API_URL ||
+      (import.meta.env.DEV ? '/api' : '/.netlify/functions')
     const response = await fetch(`${apiUrl}/hire-team`, {
       method: 'POST',
       headers: {

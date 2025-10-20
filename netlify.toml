@@ -1,6 +1,7 @@
 [build]
   publish = "dist"
   command = "npm run build"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -11,4 +12,4 @@
   status = 200
 
 [context.production.environment]
-  VITE_API_URL = "https://your-backend-url.railway.app"
+  VITE_API_URL = "/.netlify/functions"
