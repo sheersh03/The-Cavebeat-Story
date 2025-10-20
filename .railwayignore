@@ -1,0 +1,22 @@
+# Ignore frontend files for Railway deployment
+src/
+public/
+dist/
+node_modules/
+*.html
+vite.config.ts
+tailwind.config.cjs
+postcss.config.cjs
+tsconfig.json
+tsconfig.tsbuildinfo
+test-form.html
+vercel.json
+netlify.toml
+DEPLOYMENT.md
+deploy-config.js
+
+# Keep only backend files
+!backend/
+!package.json
+!railway.toml
+!nixpacks.toml
