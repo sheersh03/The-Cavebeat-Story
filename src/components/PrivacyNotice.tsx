@@ -147,14 +147,14 @@ export default function PrivacyNotice({ isOpen, onClose }: PrivacyNoticeProps) {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a 
-                  href="mailto:privacy@cavebeat.com?subject=Privacy%20Inquiry"
+                  href="mailto:cavebeatindia@gmail.com?subject=Privacy%20Inquiry"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-cyan-200/40 bg-cyan-200/10 text-cyan-200 hover:bg-cyan-200/20 transition-colors duration-200"
                 >
                   <span>📧</span>
-                  <span>privacy@cavebeat.com</span>
+                  <span>cavebeatindia@gmail.com</span>
                 </a>
                 <a 
-                  href="mailto:hello@cavebeat.com?subject=Privacy%20Inquiry"
+                  href="mailto:cavebeatindia@gmail.com?subject=Privacy%20Inquiry"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/5 text-white/80 hover:bg-white/10 transition-colors duration-200"
                 >
                   <span>💬</span>

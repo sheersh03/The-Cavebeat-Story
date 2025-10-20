@@ -580,7 +580,7 @@ export default function InnovationLab({ isOpen, onClose }: { isOpen: boolean; on
                 transition={{ delay: 3.1, duration: 0.6 }}
               >
                 <motion.a
-                  href="mailto:hello@cavebeat.com?subject=Innovation%20Lab%20Inquiry"
+                  href="mailto:cavebeatindia@gmail.com?subject=Innovation%20Lab%20Inquiry"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-cyan-200/60 bg-gradient-to-r from-[#0d1f2b]/85 via-[#113144]/85 to-[#0d1f2b]/85 text-cyan-100 hover:from-[#123548]/90 hover:via-[#17445a]/90 hover:to-[#123548]/90 hover:text-white transition-all duration-300"
                   whileHover={{ 
                     scale: 1.1, 

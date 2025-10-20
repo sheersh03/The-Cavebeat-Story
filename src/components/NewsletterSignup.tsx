@@ -148,7 +148,7 @@ export default function NewsletterSignup({ isOpen, onClose }: NewsletterSignupPr
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/5 text-white placeholder-white/40 focus:border-cyan-200/50 focus:bg-white/10 transition-colors duration-200"
-                    placeholder="your@email.com"
+                    placeholder="cavebeatindia@gmail.com"
                   />
                 </div>
 

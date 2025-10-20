@@ -172,12 +172,8 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
       }
     } catch (error) {
       console.error('Error submitting form:', error)
-      // For demo purposes, show success even if backend fails
-      setIsSuccess(true)
-      setTimeout(() => {
-        setIsSuccess(false)
-        onClose()
-      }, 3000)
+      // Show actual error to user
+      alert(`Failed to submit form: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setIsSubmitting(false)
     }
@@ -186,6 +182,20 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
   const handleClose = useCallback(() => {
     console.log('Close button clicked, isSubmitting:', isSubmitting)
     if (!isSubmitting) {
+      // Check if form has any data entered
+      const hasFormData = formData.name || formData.email || formData.phone || formData.company || 
+                         formData.projectType || formData.budget || formData.timeline || formData.message
+      
+      if (hasFormData) {
+        // Show confirmation dialog if user has started filling the form
+        const confirmed = window.confirm(
+          "You have unsaved changes. Are you sure you want to close this form? You'll be redirected to the Hire Us page."
+        )
+        if (!confirmed) {
+          return // User cancelled, don't close
+        }
+      }
+      
       setFormData({
         name: "",
         email: "",
@@ -200,8 +210,13 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
       setErrors({})
       setIsSuccess(false)
       onClose()
+      
+      // Redirect to Hire Us page after closing
+      setTimeout(() => {
+        window.location.href = '/#services'
+      }, 300) // Small delay to allow modal close animation
     }
-  }, [isSubmitting, onClose])
+  }, [isSubmitting, onClose, formData])
 
   return (
     <AnimatePresence>
@@ -244,11 +259,16 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
                     e.stopPropagation()
                     handleClose()
                   }}
-                  className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors cursor-pointer z-10"
+                  className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors cursor-pointer z-10 group"
+                  title="Close form and return to Hire Us page"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
+                  {/* Tooltip */}
+                  {/* <div className="absolute top-8 right-0 bg-black/90 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Close & Return to Hire Us
+                  </div> */}
                 </button>
                 
                 <motion.div
@@ -307,7 +327,7 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
                             className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
                               errors.email ? 'border-red-400' : 'border-white/20'
                             } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all`}
-                            placeholder="your@email.com"
+                            placeholder="cavebeatindia@gmail.com"
                             disabled={isSubmitting}
                           />
                           {errors.email && (
@@ -319,7 +339,7 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-white mb-2">
-                            Phone Number *
+                            Phone Number * <span className="text-white/60 text-xs">(International format)</span>
                           </label>
                           <input
                             type="tel"
@@ -328,9 +348,12 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
                             className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
                               errors.phone ? 'border-red-400' : 'border-white/20'
                             } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all`}
-                            placeholder="+1 (555) 123-4567"
+                            placeholder="+918448802078"
                             disabled={isSubmitting}
                           />
+                          <p className="text-white/60 text-xs mt-1">
+                            Use international format: +[country code][number] (e.g., +918448802078)
+                          </p>
                           {errors.phone && (
                             <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
                           )}
@@ -484,23 +507,36 @@ export default function HireTeamModal({ isOpen, onClose }: { isOpen: boolean; on
                         </div>
                       </div>
 
-                      {/* Submit Button */}
-                      <motion.button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full py-4 px-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {isSubmitting ? (
-                          <div className="flex items-center justify-center">
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                            Submitting...
-                          </div>
-                        ) : (
-                          "Send Project Request"
-                        )}
-                      </motion.button>
+                      {/* Action Buttons */}
+                      <div className="flex gap-4">
+                        <motion.button
+                          type="button"
+                          onClick={handleClose}
+                          disabled={isSubmitting}
+                          className="flex-1 py-4 px-6 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          Cancel
+                        </motion.button>
+                        
+                        <motion.button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="flex-1 py-4 px-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                              Submitting...
+                            </div>
+                          ) : (
+                            "Send Project Request"
+                          )}
+                        </motion.button>
+                      </div>
                     </motion.form>
                   ) : (
                     <motion.div

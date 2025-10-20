@@ -673,7 +673,7 @@ function ContactOverlay({ onOpenPrivacy, onOpenNewsletter, onOpenInnovationLab }
     },
     {
       name:'WhatsApp',
-      href:'https://wa.me/15555555555',
+      href:'https://wa.me/918448802078',
       viewBox:'0 0 24 24',
       path:[
         'M20.52 3.48A11.76 11.76 0 0 0 12.04 0h-.14A11.76 11.76 0 0 0 0.08 11.76a11.55 11.55 0 0 0 1.53 5.81L0 24l6.61-1.73a11.83 11.83 0 0 0 5.33 1.3h.13A11.76 11.76 0 0 0 23.76 12a11.69 11.69 0 0 0-3.24-8.52zM12 21.4h-.1a9.87 9.87 0 0 1-4.76-1.27l-.34-.2-3.93 1 1-3.83-.22-.35a9.66 9.66 0 0 1-1.54-5 9.79 9.79 0 0 1 9.82-9.8h.1a9.7 9.7 0 0 1 6.92 2.86A9.56 9.56 0 0 1 21.6 12 9.79 9.79 0 0 1 12 21.4zm5.42-7.56c-.3-.15-1.76-.86-2-.96s-.46-.15-.65.15-.75.94-.92 1.14-.34.22-.63.07a8.06 8.06 0 0 1-2.37-1.45 8.94 8.94 0 0 1-1.65-2c-.17-.29 0-.45.13-.6s.29-.34.44-.52.2-.29.3-.48a.52.52 0 0 0 0-.52c-.07-.15-.65-1.56-.9-2.13s-.48-.49-.65-.5-.37 0-.57 0a1.09 1.09 0 0 0-.79.37 3.34 3.34 0 0 0-1 2.49 5.83 5.83 0 0 0 1.21 3.08c.15.2 2.11 3.23 5.16 4.52a17.6 17.6 0 0 0 1.75.64 4.21 4.21 0 0 0 1.93.12 3.1 3.1 0 0 0 2-.95 2.49 2.49 0 0 0 .17-2.42c-.23-.34-.84-.52-1.13-.67z'
@@ -707,9 +707,9 @@ function ContactOverlay({ onOpenPrivacy, onOpenNewsletter, onOpenInnovationLab }
             <span>WIRED</span>
           </div>
           <div className="h-[1px] w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent"/>
-          <a href="mailto:hello@cavebeat.com" className="inline-flex items-center gap-3 text-sm tracking-[0.45em] uppercase text-cyan-100/80 hover:text-white transition max-md:text-xs max-md:tracking-[0.35em]" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
+          <a href="mailto:cavebeatindia@gmail.com" className="inline-flex items-center gap-3 text-sm tracking-[0.45em] uppercase text-cyan-100/80 hover:text-white transition max-md:text-xs max-md:tracking-[0.35em]" style={{fontFamily:'"Share Tech Mono","Rajdhani","Orbitron",monospace'}}>
             <span className="h-px w-8 bg-cyan-200/70" />
-            hello@cavebeat.com
+            cavebeatindia@gmail.com
             <span className="h-px w-8 bg-cyan-200/70" />
           </a>
         </div>

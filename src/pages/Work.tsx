@@ -298,7 +298,7 @@ export default function Work() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:hello@cavebeat.com?subject=New%20Project%20Inquiry"
+                href="mailto:cavebeatindia@gmail.com?subject=New%20Project%20Inquiry"
                 className="group relative inline-flex items-center justify-center rounded-full border border-cyan-200/60 bg-gradient-to-r from-[#0d1f2b]/85 via-[#113144]/85 to-[#0d1f2b]/85 px-10 py-3 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-all duration-300 hover:from-[#123548]/90 hover:via-[#17445a]/90 hover:to-[#123548]/90 hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200/70"
               >
                 <span className="relative z-10">Get Started</span>
