@@ -7,7 +7,7 @@
   "functions": {
     "api/**/*.js": {
       "maxDuration": 30,
-      "runtime": "nodejs22.x"
+      "runtime": "nodejs18.x"
     }
   },
   "env": { "NODE_ENV": "production" }
