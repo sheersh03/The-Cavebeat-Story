@@ -1,18 +1,20 @@
+# CaveBeat Group — cavebeat.com
 
-# CaveBeat Landing v1
-Cinematic landing with starfield particles, center medallion using your logo, and a Work/Contact pill with wave hover.
+Static marketing one-pager for **CaveBeat Group** (the technology holding company).
 
-## Stack
-Vite + React + TypeScript · Tailwind · Three.js · Framer Motion
+## Files
+- `index.html`, `cavebeat.css`, `cavebeat.js`, `assets/logo.png` — the site (no framework).
+- `npm run build` → assembles `dist/` (what Netlify publishes).
 
-## Run
-```bash
-npm i
-npm run dev
-```
+## Deploy
+Shipped via the self-hosted **Jenkins** job `ventures/cavebeat-story/deploy` → **Netlify**
+site `cavebeat` → **cavebeat.com**. Push to `main` auto-deploys **production**; other
+branches / manual builds deploy a **preview**. (See the Cavebeat CI runbook.)
 
-## Where things live
-- `src/three/Starfield.tsx` — background particles, parallax
-- `src/pages/Landing.tsx` — medallion + composition
-- `src/components/TopNav.tsx` — Work/Contact pill (wave hover)
-- `public/assets/img/bc_logo_nored.png` — the logo with the red ring removed
+## Contact form
+Front-end only — shows a thank-you state. To wire a backend, set `data-endpoint="<url>"`
+on `#contactForm` in `index.html` (it POSTs `FormData`).
+
+## History
+The previous site (Vite/React "CaveBeat – Digital Innovation Studio") is archived on branch
+**`archive/v1-live-main`**.

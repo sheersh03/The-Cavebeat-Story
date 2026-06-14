@@ -1,49 +1,344 @@
-<!doctype html>
-<html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/assets/meta/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CaveBeat - Digital Innovation Studio</title>
-    <meta name="description" content="CaveBeat is a cutting-edge digital innovation studio specializing in web development, mobile apps, and AI solutions. Transform your ideas into reality with our expert team." />
-    <meta name="keywords" content="web development, mobile apps, AI solutions, digital innovation, software development, technology consulting" />
-    <meta name="author" content="CaveBeat" />
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="CaveBeat - Digital Innovation Studio" />
-    <meta property="og:description" content="Transform your ideas into reality with our expert team of developers and innovators." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://cavebeat.com" />
-    <meta property="og:image" content="/assets/img/logo.png" />
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CaveBeat - Digital Innovation Studio" />
-    <meta name="twitter:description" content="Transform your ideas into reality with our expert team of developers and innovators." />
-    <meta name="twitter:image" content="/assets/img/logo.png" />
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/assets/img/logo.png" as="image" />
-    <link rel="preload" href="/assets/meta/favicon.svg" as="image" />
-                    <!-- Facebook Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window,document,'script',
-</script>
+<!DOCTYPE html>
+<html lang="en" class="cb-preload">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CaveBeat Group — The Company Behind Companies</title>
+<meta name="description" content="CaveBeat Group builds, scales, and operates category-defining technology companies for the intelligence age.">
+<link rel="stylesheet" href="cavebeat.css">
+<link rel="canonical" href="https://cavebeat.com">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cavebeat.com">
+<meta property="og:title" content="CaveBeat Group — The Company Behind Companies">
+<meta property="og:description" content="CaveBeat Group builds, scales, and operates category-defining technology companies for the intelligence age.">
+<meta property="og:image" content="https://cavebeat.com/assets/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CaveBeat Group — The Company Behind Companies">
+<meta name="twitter:description" content="CaveBeat Group builds, scales, and operates category-defining technology companies for the intelligence age.">
+<meta name="twitter:image" content="https://cavebeat.com/assets/logo.png">
 </head>
-  <body>
-<noscript>
- <img height="1" width="1" 
-src="https://www.facebook.com/tr?id=1132200875745908&ev=PageView
-&noscript=1"/>
-</noscript>
-<!-- End Facebook Pixel Code -->
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<body class="grain-on glow-on">
+
+<div class="grain" aria-hidden="true"></div>
+<div class="matrix" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="CaveBeat Group home">
+      <span class="logo-chip" aria-hidden="true"><img src="assets/logo.png" alt=""></span>
+      <span class="wordmark">CaveBeat<span>&nbsp;Group</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#who">Who We Are</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#model">Operating Model</a>
+      <a href="#vision">Vision</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-dark btn-sm">Learn More</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mm-top">
+    <span class="brand"><span class="logo-chip" aria-hidden="true"><img src="assets/logo.png" alt=""></span><span class="wordmark">CaveBeat</span></span>
+    <button class="menu-btn" id="menuClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="mm-links">
+    <a href="#who">Who We Are</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#model">Operating Model</a>
+    <a href="#vision">Vision</a>
+  </div>
+  <a href="#contact" class="btn btn-primary">Get in touch</a>
+</div>
+
+<main id="top" data-screen-label="Home">
+
+<!-- ============ HERO ============ -->
+<section class="hero" data-screen-label="Hero">
+  <div class="glow" aria-hidden="true"></div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="eyebrow reveal">The Company Behind Companies</span>
+      <h1 class="display reveal" data-d="1"><span class="silver" id="heroLine1">Building Companies</span><br><span id="heroLine2">For The Intelligence Age</span></h1>
+      <p class="lede reveal" data-d="2">A venture studio creating and scaling technology businesses across AI, enterprise software, and consumer platforms.</p>
+      <div class="hero-cta reveal" data-d="3">
+        <a href="#portfolio" class="btn btn-primary">Explore Portfolio <span class="arr">→</span></a>
+        <a href="#who" class="btn btn-ghost">About CaveBeat</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <div class="wrap">
+      <div class="metrics reveal">
+        <div class="metric"><div class="n">4</div><div class="l">Active ventures</div></div>
+        <div class="metric"><div class="n">$200M+</div><div class="l">Enterprise value</div></div>
+        <div class="metric"><div class="n">3</div><div class="l">Core categories</div></div>
+      </div>
+      <div class="scroll-hint">Scroll <span class="bar"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHO WE ARE ============ -->
+<section class="band band-line" id="who" data-screen-label="Who We Are">
+  <div class="wrap">
+    <span class="eyebrow reveal">Who We Are</span>
+    <div class="who" style="margin-top:clamp(36px,5vw,64px)">
+      <h2 class="statement reveal">The company<br>behind companies.</h2>
+      <div class="narr">
+        <p class="reveal" data-d="1">CaveBeat Group is a technology holding company. We don't ship a single product — we <strong>create, scale, and operate</strong> an expanding set of businesses across AI, consumer internet, and enterprise software.</p>
+        <p class="reveal" data-d="2">We back our ventures with shared capital, infrastructure, and operating teams — so founders can move at the speed of the idea, not the org chart.</p>
+        <p class="reveal" data-d="3">The next decade belongs to companies built AI-native from the first line of code. We're building them now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section class="band band-line" id="portfolio" data-screen-label="Portfolio">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow reveal">Portfolio</span>
+        <h2 class="h2 reveal" data-d="1" style="margin-top:20px">A portfolio of category-defining ventures.</h2>
+      </div>
+      <p class="lede reveal" data-d="2" style="max-width:30ch">Each company stands as a distinct brand — built, funded, and operated from within the group.</p>
+    </div>
+
+    <div class="pf reveal">
+      <a class="pf-row" href="#contact">
+        <span class="pf-idx">01</span>
+        <div><div class="pf-name">Vybb</div><div class="pf-cat">Consumer Internet · Social</div></div>
+        <p class="pf-desc">A consumer platform reimagining how communities form, share, and earn together — built mobile-first for the next billion creators.</p>
+        <span class="pf-meta"><span class="status"><span class="dot"></span>Scaling</span><span class="pf-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>
+      </a>
+      <a class="pf-row" href="#contact">
+        <span class="pf-idx">02</span>
+        <div><div class="pf-name">Inventra</div><div class="pf-cat">Enterprise Software · Operations</div></div>
+        <p class="pf-desc">Operational intelligence for modern enterprises — unifying inventory, supply, and demand into one autonomous decision layer.</p>
+        <span class="pf-meta"><span class="status"><span class="dot"></span>Operating</span><span class="pf-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>
+      </a>
+      <a class="pf-row" href="#contact">
+        <span class="pf-idx">03</span>
+        <div><div class="pf-name">Cogniqo AI</div><div class="pf-cat">Artificial Intelligence · Autonomous Systems</div></div>
+        <p class="pf-desc">Autonomous agents that do real work — a foundational platform for deploying reliable AI labor across the modern enterprise.</p>
+        <span class="pf-meta"><span class="status"><span class="dot"></span>Building</span><span class="pf-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>
+      </a>
+      <a class="pf-row" href="#contact">
+        <span class="pf-idx">04</span>
+        <div><div class="pf-name">Future Ventures</div><div class="pf-cat">Emerging · Incubation</div></div>
+        <p class="pf-desc">What we're building next. A rolling pipeline of theses and founding teams forming inside the group — across frontier categories.</p>
+        <span class="pf-meta"><span class="status"><span class="dot"></span>Incubating</span><span class="pf-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPERATING MODEL ============ -->
+<section class="band band-line" id="model" data-screen-label="Operating Model">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow reveal">Operating Model</span>
+        <h2 class="h2 reveal" data-d="1" style="margin-top:20px">One engine.<br>Four disciplines.</h2>
+      </div>
+      <p class="lede reveal" data-d="2" style="max-width:32ch">A repeatable system for turning a thesis into a company, and a company into a category leader.</p>
+    </div>
+
+    <div class="model" id="model-diagram">
+      <div class="rail" aria-hidden="true"></div>
+      <div class="pillars">
+        <div class="pillar reveal"><span class="node" aria-hidden="true"></span><div class="pn">01</div><h3>Build</h3><p>We start companies from zero — thesis, product, and founding team, incubated inside the group.</p></div>
+        <div class="pillar reveal" data-d="1"><span class="node" aria-hidden="true"></span><div class="pn">02</div><h3>Scale</h3><p>Capital, distribution, and operating muscle to reach product-market fit, then escape velocity.</p></div>
+        <div class="pillar reveal" data-d="2"><span class="node" aria-hidden="true"></span><div class="pn">03</div><h3>Operate</h3><p>Shared infrastructure across finance, hiring, brand, and growth — leverage every venture inherits.</p></div>
+        <div class="pillar reveal" data-d="3"><span class="node" aria-hidden="true"></span><div class="pn">04</div><h3>Invest</h3><p>Backing exceptional founders building in our core categories, in and beyond the portfolio.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISION ============ -->
+<section class="band-line" id="vision" data-screen-label="Vision">
+  <div class="wrap vision">
+    <span class="eyebrow reveal">Vision</span>
+    <p class="v-text reveal" data-d="1" style="margin-top:34px">The next generation of companies will be <span class="silver">AI-native</span>.</p>
+    <p class="lede v-sub reveal" data-d="2">We're not adapting old businesses to a new era. We're building the ones designed for it — from the first decision to the last line of code.</p>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact" data-screen-label="Contact">
+  <div class="glow2" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="inner">
+      <span class="eyebrow reveal">Contact</span>
+      <h2 class="h2 reveal" data-d="1">Let's build something<br>category-defining.</h2>
+      <p class="lede reveal" data-d="2" style="max-width:46ch">For founders, investors, and operators who want to build the next generation of technology companies — with us.</p>
+      <div class="contact-cta reveal" data-d="3">
+        <button type="button" class="btn btn-primary" id="openContact">Contact Us <span class="arr">→</span></button>
+        <a href="#portfolio" class="btn btn-ghost">View Portfolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+
+    <div class="foot-main">
+      <a class="foot-mark" href="#top" aria-label="CaveBeat Group home">
+        <span class="logo-chip" aria-hidden="true"><img src="assets/logo.png" alt=""></span>
+      </a>
+
+      <div class="foot-col">
+        <h4>Ventures</h4>
+        <a href="#portfolio">Vybb</a>
+        <a href="#portfolio">Inventra</a>
+        <a href="#portfolio">Cogniqo AI</a>
+        <a href="#portfolio">Future Ventures</a>
+        <a href="#portfolio">Portfolio</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#who">About Us</a>
+        <a href="#model">Operating Model</a>
+        <a href="#vision">Vision</a>
+        <a href="#contact">Careers</a>
+        <a href="#contact">Startup Program</a>
+        <a href="#contact">Newsroom</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>Resources</h4>
+        <a href="#contact">For Founders</a>
+        <a href="#contact">For Investors</a>
+        <a href="#contact">Insights</a>
+        <a href="#contact">Case Studies</a>
+        <a href="#contact">Press Kit</a>
+        <a href="#contact">Reports &amp; Guides</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@cavebeat.com">General</a>
+        <a href="#contact">Partnerships</a>
+        <a href="#contact">Investor Relations</a>
+        <a href="#contact">Media</a>
+      </div>
+
+      <div class="foot-news">
+        <form class="news-box" onsubmit="return false">
+          <input type="email" class="news-input" placeholder="youremail@domain.com" aria-label="Email address">
+          <button type="submit" class="news-btn">Subscribe</button>
+        </form>
+        <p class="news-consent">By signing up you agree to our <a href="#contact">Terms of Use</a> and authorize CaveBeat to provide occasional updates about its ventures and portfolio. You can opt out at any time, and your data will be handled in accordance with the <a href="#contact">CaveBeat Privacy Policy</a>.</p>
+        <div class="foot-social">
+          <a href="#contact" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg></a>
+          <a href="#contact" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a>
+          <a href="#contact" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"/></svg></a>
+          <a href="#contact" aria-label="RSS"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 11a9 9 0 0 1 9 9h2.5A11.5 11.5 0 0 0 4 8.5V11Zm0 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm0-10a15 15 0 0 1 15 15h2.5A17.5 17.5 0 0 0 4 3.5V6Z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-lang">
+      <button class="lang-btn" aria-label="Select language">English <span aria-hidden="true">⌄</span></button>
+    </div>
+
+    <div class="foot-mega" aria-hidden="true">CaveBeat</div>
+
+    <div class="foot-bot">
+      <nav class="fb-legal" aria-label="Legal">
+        <a href="#contact">Terms of Service</a>
+        <a href="#contact">Privacy Policy</a>
+      </nav>
+      <span class="fb-copy">CaveBeat Group, Inc. © 2026</span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============ CONTACT FORM MODAL ============ -->
+<div class="modal" id="contactModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="cmTitle">
+    <div class="modal-edge" aria-hidden="true"></div>
+    <button type="button" class="modal-x" id="closeContact" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+
+    <div class="modal-body" id="cmForm">
+      <span class="eyebrow">Get in touch</span>
+      <h3 class="modal-title" id="cmTitle">Let's start a conversation.</h3>
+      <p class="modal-sub">Tell us a little about you and what you're building. We read every message.</p>
+      <!-- Backend hookup: set data-endpoint to your URL (or change method/action).
+           When data-endpoint is empty the form just shows the thank-you state. -->
+      <form id="contactForm" method="POST" action="" data-endpoint="" novalidate>
+        <div class="field-row">
+          <label class="field">
+            <span>Name</span>
+            <input type="text" name="name" autocomplete="name" placeholder="Jane Doe" required>
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" placeholder="jane@company.com" required>
+          </label>
+        </div>
+        <label class="field">
+          <span>Company <em>(optional)</em></span>
+          <input type="text" name="company" autocomplete="organization" placeholder="Company or venture">
+        </label>
+        <label class="field">
+          <span>I'm reaching out as a</span>
+          <div class="select-wrap">
+            <select name="role" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Founder</option>
+              <option>Investor</option>
+              <option>Operator / Talent</option>
+              <option>Partnership</option>
+              <option>Press</option>
+              <option>Other</option>
+            </select>
+            <svg class="select-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </label>
+        <label class="field">
+          <span>How can we help?</span>
+          <textarea name="message" rows="4" placeholder="A few lines about your idea, round, or question…" required></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary modal-submit">Send message <span class="arr">→</span></button>
+      </form>
+    </div>
+
+    <div class="modal-thanks" id="cmThanks" hidden>
+      <span class="thanks-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      </span>
+      <h3 class="modal-title">Thank you for reaching out.</h3>
+      <p class="modal-sub">We've received your message and will get back to you shortly — usually within two business days.</p>
+      <button type="button" class="btn btn-ghost" id="thanksClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="cavebeat.js"></script>
+</body>
 </html>
