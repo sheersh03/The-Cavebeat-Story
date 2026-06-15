@@ -452,9 +452,11 @@ main>section+section{margin-top:clamp(120px,15vw,240px)}
   .pf-row{grid-template-columns:34px 1fr auto;gap:14px}
   .pf-desc{display:none}
   .pf-meta .status{display:none}
-  .hero-foot{position:static;margin-top:54px}
-  .hero{min-height:auto;padding-bottom:80px}
-  .metrics{gap:30px}
+  .hero-foot{position:static;margin-top:48px}
+  .hero{min-height:auto;padding-bottom:72px;flex-direction:column;align-items:stretch;justify-content:flex-start}
+  .hero-foot .wrap{justify-content:flex-start;gap:16px}
+  .metrics{gap:clamp(20px,7vw,40px);flex-wrap:wrap}
+  .scroll-hint{display:none}
 }
 @media (max-width:520px){
   .foot-grid{grid-template-columns:1fr}
