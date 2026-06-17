@@ -485,3 +485,40 @@ main>section+section{margin-top:clamp(120px,15vw,240px)}
 .legal-wrap p,.legal-wrap li{color:var(--t2);font-size:1.03rem;line-height:1.75}
 .legal-wrap ul{padding-left:22px;margin-top:8px}
 .legal-wrap a{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
+
+/* ============ team page ============ */
+.team-head{padding-top:clamp(130px,16vw,190px)}
+.team-head .h2{max-width:18ch;margin-top:22px}
+.team-head .lede{margin-top:24px;max-width:58ch}
+.team-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.6vw,32px);
+  margin-top:clamp(48px,7vw,80px);
+}
+.team-card{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:clamp(24px,2.4vw,32px);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .4s var(--ease);
+}
+.team-card:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:0 24px 54px rgba(10,10,10,.10)}
+.team-grid .team-card:nth-child(4n+1){--accent:#4f7cff}
+.team-grid .team-card:nth-child(4n+2){--accent:#a64bff}
+.team-grid .team-card:nth-child(4n+3){--accent:#ff2d9b}
+.team-grid .team-card:nth-child(4n+4){--accent:#22d3a7}
+.tc-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.tc-avatar{
+  width:64px;height:64px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-weight:700;font-size:1.25rem;color:#fff;background:#0a0a0a;overflow:hidden;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,var(--brand)) 24%,transparent)
+}
+.tc-avatar img{width:100%;height:100%;object-fit:cover}
+.tc-name{font-family:var(--serif);font-weight:700;font-size:1.3rem;letter-spacing:-.02em;line-height:1.1}
+.tc-role{color:var(--accent,var(--brand));font-size:13px;font-weight:600;letter-spacing:.04em;margin-top:5px}
+.tc-bio{color:var(--t2);font-size:.97rem;line-height:1.6}
+.tc-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tc-tag{font-size:12px;letter-spacing:.02em;color:var(--t2);border:1px solid var(--line2);border-radius:999px;padding:4px 12px}
+.tc-social{display:flex;gap:16px;margin-top:18px}
+.tc-social a{color:var(--t3);transition:color .25s var(--ease),transform .25s var(--ease)}
+.tc-social a:hover{color:var(--accent,var(--brand));transform:translateY(-2px)}
+.tc-social svg{width:19px;height:19px;display:block}
+@media (max-width:900px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.team-grid{grid-template-columns:1fr}}
