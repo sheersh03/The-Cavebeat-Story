@@ -4,7 +4,7 @@
   "private": true,
   "description": "CaveBeat Group — static marketing site (cavebeat.com)",
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist/assets && cp index.html cavebeat.css cavebeat.js dist/ && cp assets/logo.png dist/assets/",
+    "build": "rm -rf dist && mkdir -p dist/assets && cp index.html terms.html privacy.html cavebeat.css cavebeat.js dist/ && cp assets/logo.png dist/assets/",
     "dev": "python3 -m http.server 8000"
   }
 }

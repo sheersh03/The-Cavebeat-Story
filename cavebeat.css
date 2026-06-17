@@ -276,12 +276,14 @@ main>section+section{margin-top:clamp(120px,15vw,240px)}
   box-shadow:0 30px 80px rgba(166,75,255,.22)}
 .contact .inner::before{content:"";position:absolute;inset:0;border-radius:28px;background:var(--spectrum);z-index:-1}
 .contact .h2{max-width:20ch}
+.contact .lede{color:rgba(10,10,10,.82)}
 .contact-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 
 /* ============ contact form modal ============ */
 .modal{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
   padding:clamp(16px,4vw,40px);visibility:hidden;opacity:0;transition:opacity .35s var(--ease)}
 .modal.open{visibility:visible;opacity:1}
+.modal [hidden]{display:none !important}
 .modal-backdrop{position:absolute;inset:0;background:rgba(10,10,12,.42);backdrop-filter:blur(6px)}
 .modal-card{position:relative;z-index:1;width:min(560px,100%);max-height:calc(100svh - clamp(32px,8vw,80px));overflow:auto;
   background:var(--bg);border-radius:24px;padding:clamp(26px,4vw,40px);
@@ -335,7 +337,7 @@ main>section+section{margin-top:clamp(120px,15vw,240px)}
 
 /* main grid: logo + 4 columns + newsletter */
 .foot-main{display:grid;
-  grid-template-columns:56px repeat(4,minmax(0,1fr)) minmax(300px,1.5fr);
+  grid-template-columns:56px repeat(3,minmax(0,1fr)) minmax(300px,1.5fr);
   gap:clamp(28px,3.4vw,52px);align-items:start}
 .foot-mark{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;
   background:#0a0a0a;overflow:hidden}
@@ -473,3 +475,13 @@ main>section+section{margin-top:clamp(120px,15vw,240px)}
 .mobile-menu .mm-links{display:flex;flex-direction:column;gap:6px;margin-top:40px}
 .mobile-menu .mm-links a{font-family:var(--serif);font-weight:700;font-size:2rem;letter-spacing:-.03em;padding:12px 0;border-bottom:1px solid var(--line)}
 .mobile-menu .btn{margin-top:32px;width:100%}
+
+/* legal pages */
+.legal-page{position:relative;z-index:2;background:transparent;padding:clamp(130px,16vw,190px) 0 clamp(80px,10vw,130px)}
+.legal-wrap{max-width:880px;margin:0 auto;padding:0 var(--pad);background:var(--bg);color:var(--text)}
+.legal-wrap .h2{margin-top:22px;margin-bottom:12px}
+.legal-updated{color:var(--t3);font-weight:600;margin-bottom:34px}
+.legal-wrap h2{font-family:var(--serif);font-size:clamp(1.35rem,2.4vw,1.8rem);line-height:1.15;letter-spacing:-.02em;margin:34px 0 10px}
+.legal-wrap p,.legal-wrap li{color:var(--t2);font-size:1.03rem;line-height:1.75}
+.legal-wrap ul{padding-left:22px;margin-top:8px}
+.legal-wrap a{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
